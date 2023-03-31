@@ -57,7 +57,7 @@ class AUROCWithMWU(torchmetrics.Metric):
 
   This AUROC implementation is well suited to (non-zero) low-CTR. In particular it will return
   the correct AUROC even if the predicted probabilities are all close to 0.
-  Currently only support binary classification.
+  Currently only supports binary classification.
   """
 
   def __init__(self, label_threshold: float = 0.5, raise_missing_class: bool = False, **kwargs):
