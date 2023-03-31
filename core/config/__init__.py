@@ -1,5 +1,5 @@
 from tml.core.config.base_config import BaseConfig
 from tml.core.config.config_load import load_config_from_yaml
 
-# Make mypy happy by explicitly reporting the symbols intended for end user use.
+# Make mypy happy by explicitly exporting the symbols intended for end user use.
 __all__ = ["BaseConfig", "load_config_from_yaml"]
