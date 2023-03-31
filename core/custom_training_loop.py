@@ -28,7 +28,7 @@ import torchmetrics as tm
 
 def get_new_iterator(iterable: Iterable):
   """
-  This obtain a new iterator from the iterable. If the iterable uses tf.data.Dataset internally,
+  This obtains a new iterator from the iterable. If the iterable uses tf.data.Dataset internally,
    getting a new iterator each N steps will avoid memory leak. To avoid the memory leak
    calling iter(iterable) should return a "fresh" iterator using a fresh
    (new instance of) tf.data.Iterator.
@@ -115,7 +115,7 @@ def train(
     dataset: data iterator for the training set
     evaluation_iterators: data iterators for the different evaluation sets
     scheduler: optional learning rate scheduler
-    output_transform_for_metrics: optional transformation functions to transorm the model
+    output_transform_for_metrics: optional transformation functions to transform the model
                                   output and labels into a format the metrics can understand
   """
 

@@ -18,7 +18,7 @@ class DropoutConfig(base_config.BaseConfig):
 
 
 class LayerNormConfig(base_config.BaseConfig):
-  """Configruation for the layer normalization."""
+  """Configuration for the layer normalization."""
 
   epsilon: float = pydantic.Field(
     1e-3, description="Small float added to variance to avoid dividing by zero."
