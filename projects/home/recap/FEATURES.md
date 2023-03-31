@@ -2040,10 +2040,10 @@ tweetsource.v2.tweet.media.num_color_pallette_items <br>
 tweetsource.v2.tweet.media.num_faces <br> 
 tweetsource.v2.tweet.media.num_stickers <br> 
 tweetsource.v2.tweet.media.view_count <br> 
+</code>
 </td>
 </tr>
 </table>
-</code>
 </details>
 
 <details>
@@ -2109,7 +2109,6 @@ in_reply_to_tweet.tweetsource.tweet.text.num_caps <br>
 </td>
 </tr>
 </table>
-</code>
 </details>
 
 <details>
@@ -2265,3 +2264,4 @@ We have two embeddings trained on the user-user follow graph, one representing w
 <summary><b><code>Twhin Engagement Embeddings</code></b></summary>
 <br>
 We have one embedding trained on the user-tweet engagement graph, representing users based on the Tweets they are likely to engage with. This embedding is 200 dimensional.
+</details>
