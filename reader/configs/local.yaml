@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  chief-0:
+    image: local/torch
+    command: ['python', 'tml/reader/run.py']
+    volumes: &volumes
+      - $HOME/workspace/tml:/usr/src/app/tml
+      - $HOME/.config:/root/.config
+    environment:
+      - SLURM_RANK_INDICATOR=chief
+      - TEMP_SLURM_NUM_READERS=1
+  datasetworker-0: &worker
+    image: local/torch
+    command: ['python', 'tml/reader/run.py']
+    volumes: *volumes
+    ports:
+      - "2222:2222"
+    environment:
+      - SLURM_RANK_INDICATOR=reader
+      - TEMP_SLURM_NUM_READERS=1
+networks:
+  host:

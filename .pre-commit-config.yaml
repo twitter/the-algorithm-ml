@@ -1,0 +1,16 @@
+repos:
+-   repo: https://github.com/pausan/cblack
+    rev: release-22.3.0
+    hooks:
+    - id: cblack
+      name: cblack
+      description: "Black: The uncompromising Python code formatter - 2 space indent fork"
+      entry: cblack . -l 100
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-added-large-files
+    -   id: check-merge-conflict

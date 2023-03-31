@@ -1,0 +1,499 @@
+{
+  "schema" : [
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "home_recap_2022_discrete__segdense_vals",
+      "length" : 320
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "home_recap_2022_cont__segdense_vals",
+      "length" : 6000
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "home_recap_2022_binary__segdense_vals",
+      "length" : 512
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "home_recap_2022_string__segdense_vals",
+      "length" : 64
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "home_recap_2022_blob__segdense_vals",
+      "length" : 64
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_photo_expanded",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_tweet_detail_dwelled_15_sec",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "meta.timestamp",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_replied",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_profile_clicked_and_profile_engaged",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_retweeted",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_profile_clicked",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_shared",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_share_menu_clicked",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_replied_reply_engaged_by_author",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_profile_clicked_and_profile_engaged",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_profile_dwelled_30_sec",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_video_playback_50",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_negative_feedback_v2",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_strong_negative_feedback",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_photo_expanded",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_share_menu_clicked",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_report_tweet_clicked",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_dwell",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_replied",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_clicked",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "meta.author_id",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_weak_negative_feedback",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_favorited",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_weak_negative_feedback",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_negative_feedback_v2",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_profile_dwelled_20_sec",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_quoted",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_profile_dwelled_20_sec",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_retweeted",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_profile_dwelled_10_sec",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_report_tweet_clicked",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_strong_negative_feedback",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_dwelled",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_profile_dwelled_10_sec",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "timelines.meta.candidate_tweet_source_id",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_favorited",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_clicked",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_good_clicked_convo_desc_v2",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "timelines.engagement.dwell_time_ms",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_good_clicked_convo_desc_favorited_or_replied",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_tweet_detail_dwelled_15_sec",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "meta.tweet_id",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_good_clicked_convo_desc_v2",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "meta.user_id",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_good_clicked_convo_desc_favorited_or_replied",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_replied_reply_engaged_by_author",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_bookmarked",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "meta.record_weight/type=recap",
+      "length" : 1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "recap.engagement_predicted.is_video_playback_50",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_shared",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "timelines.meta.prediction_request_id",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_quoted",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_profile_clicked",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "recap.engagement.is_profile_dwelled_30_sec",
+      "length" : 1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "user.recommender_systems_research.recap_hashspace_pq_encoded.good_profile_click",
+      "length" : -1
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "tweetsource.v3.tweet.text.emoji_tokens",
+      "length" : -1
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "entities.inferred_topic_ids",
+      "length" : -1
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "semantic_core.media_understanding.high_recall.sensitive.entity_ids",
+      "length" : -1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "user.timelines.twhin_user_engagement_embeddings.twhin_user_engagement_embeddings",
+      "length" : 200
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "user.interests_discovery.user_topic_relationships.not_interested_topics",
+      "length" : -1
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "tweetsource.v2.tweet.media.providers",
+      "length" : -1
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "tweetsource.v3.tweet.text.pos_unigrams",
+      "length" : -1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "user.recommender_systems_research.recap_hashspace_pq_encoded.share_menu_click",
+      "length" : -1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "original_author.twhin.tw_hi_n.author_follow_as_float_tensor",
+      "length" : 200
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "tweetsource.tweet.media.sticker_ids",
+      "length" : -1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "original_author.timelines.twhin_author_follow_embeddings.twhin_author_follow_embeddings",
+      "length" : 200
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "user.recommender_systems_research.recap_hashspace_pq_encoded.good_click",
+      "length" : -1
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "tweetsource.v2.tweet.media.classification_labels__key0",
+      "length" : -1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "user.recommender_systems_research.recap_hashspace_pq_encoded.share",
+      "length" : -1
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "semantic_core.media_understanding.high_recall.non_sensitive.entity_ids",
+      "length" : -1
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "semantic_core.media_understanding.high_precision.non_sensitive.entity_ids",
+      "length" : -1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "user.recommender_systems_research.recap_hashspace_pq_encoded.reported",
+      "length" : -1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "tweet.cuad.hashspace.tweet_embedding_tensor",
+      "length" : 256
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "semantic_core.common.entity_ids",
+      "length" : -1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "user.recommender_systems_research.recap_hashspace_pq_encoded.negative_feedback_v_2",
+      "length" : -1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "user.recommender_systems_research.recap_hashspace_pq_encoded.retweet",
+      "length" : -1
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "tweetsource.tweet.media.tag_screen_names",
+      "length" : -1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "user.twhin.tw_hi_n.user_follow_as_float_tensor",
+      "length" : 200
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "tweetsource.v2.tweet.media.classification_labels__vals",
+      "length" : -1
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "in_reply_to_tweet.tweetsource.v4.tweet.text.tokens",
+      "length" : -1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "user.recommender_systems_research.recap_hashspace_pq_encoded.playback_50",
+      "length" : -1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "user.recommender_systems_research.recap_hashspace_pq_encoded.reply",
+      "length" : -1
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "recap.tweetfeature.url_domains",
+      "length" : -1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "user.recommender_systems_research.recap_hashspace_pq_encoded.reply_engaged_by_author",
+      "length" : -1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "user.twhin.tw_hi_n.user_engagement_as_float_tensor",
+      "length" : 200
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "tweetsource.v3.tweet.text.pos_bigrams",
+      "length" : -1
+    },
+    {
+      "dtype" : "float_list",
+      "feature_name" : "user.timelines.twhin_user_follow_embeddings.twhin_user_follow_embeddings",
+      "length" : 200
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "in_reply_to_tweet.tweetsource.v3.tweet.text.emoji_tokens",
+      "length" : -1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "user.recommender_systems_research.recap_hashspace_pq_encoded.good_click_v_2",
+      "length" : -1
+    },
+    {
+      "dtype" : "int64_list",
+      "feature_name" : "user.recommender_systems_research.recap_hashspace_pq_encoded.fav",
+      "length" : -1
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "user.interests_discovery.user_topic_relationships.followed_topics",
+      "length" : -1
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "semantic_core.media_understanding.high_precision.sensitive.entity_ids",
+      "length" : -1
+    },
+    {
+      "dtype" : "bytes_list",
+      "feature_name" : "tweetsource.v3.tweet.text.emoticon_tokens",
+      "length" : -1
+    }
+  ]
+}

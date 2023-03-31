@@ -1,0 +1,72 @@
+runtime:
+  wandb:
+    key_path: "/var/lib/tss/keys/${USER}/wandb.key"
+    name: "twhin-test"
+    entity: "-"
+    project: "twhin-test"
+    host: "https://https--wandb--prod--wandb.service.qus1.twitter.biz/"
+training:
+  save_dir: "/tmp/model"
+  num_train_steps: 100000
+  checkpoint_every_n: 100000
+  train_log_every_n: 10
+  num_eval_steps: 1000
+  eval_log_every_n: 500
+  eval_timeout_in_s: 10000
+  num_epochs: 5
+model:
+  translation_optimizer:
+    sgd:
+      lr: 0.05
+    learning_rate:
+      constant: 0.05
+  embeddings:
+    tables:
+      - name: user
+        num_embeddings: 700_410_729
+        embedding_dim: 64
+        data_type: fp16
+        optimizer:
+          sgd:
+            lr: 0.01
+          learning_rate:
+            constant: 0.01
+      - name: tweet
+        num_embeddings: 250_543_984
+        embedding_dim: 64
+        data_type: fp16
+        optimizer:
+          adagrad:
+            lr: 0.01
+          learning_rate:
+            constant: 0.01
+  relations:
+    - name: fav
+      lhs: user
+      rhs: tweet
+      operator: translation
+    - name: reply
+      lhs: user
+      rhs: tweet
+      operator: translation
+    - name: retweet
+      lhs: user
+      rhs: tweet
+      operator: translation
+    - name: magic_recs
+      lhs: user
+      rhs: tweet
+      operator: translation
+train_data:
+  data_root: "/home/-/twhin-sample/*"
+  per_replica_batch_size: 65536
+  global_negatives: 100
+  in_batch_negatives: 100
+  limit: 9990
+validation_data:
+  data_root: "/home/-/twhin-sample/*"
+  per_replica_batch_size: 65536
+  global_negatives: 100
+  in_batch_negatives: 100
+  limit: 10
+  offset: 9990

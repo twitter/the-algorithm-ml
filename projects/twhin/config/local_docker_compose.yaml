@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  chief-0:
+    depends_on:
+      - datasetworker-0
+      - datasetworker-1
+    image: local/torch
+    command: ['python', 'tml/projects/twhin/toy.py']
+    volumes: &volumes
+      - $HOME/workspace/tml:/usr/src/app/tml
+      - $HOME/.config:/root/.config
+    environment:
+      - SLURM_RANK_INDICATOR=chief
+      - TEMP_SLURM_NUM_READERS=2
+      - RANK=0
+      - WORLD_SIZE=1
+      - MASTER_ADDR=localhost
+      - MASTER_PORT=2020
+  datasetworker-0: &worker
+    image: local/torch
+    command: ['python', 'tml/projects/twhin/toy.py']
+    volumes: *volumes
+    ports:
+      - "2222:2222"
+    environment:
+      - SLURM_RANK_INDICATOR=reader
+      - TEMP_SLURM_NUM_READERS=2
+  datasetworker-1:
+    image: local/torch
+    command: ['python', 'tml/projects/twhin/toy.py']
+    volumes: *volumes
+    ports:
+      - "2223:2222"
+    environment:
+      - SLURM_RANK_INDICATOR=reader
+      - TEMP_SLURM_NUM_READERS=2
+networks:
+  host:
