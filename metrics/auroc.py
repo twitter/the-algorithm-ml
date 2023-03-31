@@ -62,7 +62,6 @@ class AUROCWithMWU(torchmetrics.Metric):
 
   def __init__(self, label_threshold: float = 0.5, raise_missing_class: bool = False, **kwargs):
     """
-
     Args:
       label_threshold: Labels strictly above this threshold are considered positive labels,
                        otherwise, they are considered negative.

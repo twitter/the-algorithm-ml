@@ -16,7 +16,6 @@ class Snapshot:
   """Checkpoints using torchsnapshot.
 
   Also saves step to be updated by the training loop.
-
   """
 
   def __init__(self, save_dir: str, state: Dict[str, Any]) -> None:
@@ -146,7 +145,6 @@ def checkpoints_iterator(save_dir: str, seconds_to_sleep: int = 30, timeout: int
   Args:
     seconds_to_sleep: time between polling calls.
     timeout: how long to wait for a new checkpoint.
-
   """
 
   def _poll(last_checkpoint: Optional[str] = None):
@@ -184,7 +182,6 @@ def get_checkpoint(
   Args:
     global_step: Finds this checkpoint if specified.
     missing_ok: if True and checkpoints do not exist, returns without restoration.
-
   """
   checkpoints = get_checkpoints(save_dir)
   if not checkpoints:

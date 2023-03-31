@@ -24,7 +24,6 @@ def update_mean(
     weight: The weights for the new value.
 
   Returns: The updated mean and updated weighted sum.
-
   """
   weight = torch.broadcast_to(weight, value.shape)
 
@@ -42,7 +41,6 @@ def stable_mean_dist_reduce_fn(state: torch.Tensor) -> torch.Tensor:
     state: A tensor with the first dimension indicating workers.
 
   Returns: The accumulated mean from all workers.
-
   """
   mean, weight_sum = update_mean(
     current_mean=torch.as_tensor(0.0, dtype=state.dtype, device=state.device),

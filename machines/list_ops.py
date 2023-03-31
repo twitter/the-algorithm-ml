@@ -15,7 +15,6 @@ Args:
 Typical usage would be in a bash script, e.g.:
 
   LIST_LEN=$(python list_ops.py --input_list=$INPUT --op=len)
-
 """
 import tml.machines.environment as env
 

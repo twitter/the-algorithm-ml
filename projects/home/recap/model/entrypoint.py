@@ -26,7 +26,7 @@ def unsanitize(sanitized_task_name):
 
 
 def _build_single_task_model(task: model_config_mod.TaskModel, input_shape: int):
-  """ "Builds a model for a single task"""
+  """"Builds a model for a single task"""
   if task.mlp_config:
     return mlp.Mlp(in_features=input_shape, mlp_config=task.mlp_config)
   elif task.dcn_config:

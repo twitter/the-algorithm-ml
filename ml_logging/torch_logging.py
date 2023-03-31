@@ -6,7 +6,6 @@
     >>> from ml.logging.torch_logging import logging
     >>> logging.info(f"This only prints on rank 0 if distributed, otherwise prints normally.")
     >>> logging.info(f"This prints on all ranks if distributed, otherwise prints normally.", rank=-1)
-
 """
 import functools
 from typing import Optional

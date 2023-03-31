@@ -2,7 +2,6 @@
 
 - Override `pa_to_batch` for dataset specific imputation, negative sampling, or coercion to Batch.
 - Readers can be colocated or off trainer machines.
-
 """
 import abc
 import functools

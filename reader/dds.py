@@ -1,5 +1,4 @@
-"""Dataset service orchestrated by a TFJob
-"""
+"""Dataset service orchestrated by a TFJob"""
 from typing import Optional
 import uuid
 
@@ -104,7 +103,6 @@ def maybe_distribute_dataset(dataset: tf.data.Dataset) -> tf.data.Dataset:
   - all rank processes will consume from the same job/dataset.
 
   Without this, dataset workers will try to serve 1 job per rank process and OOM.
-
   """
   if not env.has_readers():
     return dataset
