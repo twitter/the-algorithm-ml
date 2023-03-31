@@ -7,7 +7,7 @@ We obtain entity embeddings based on a variety of graph data within Twitter such
   "User favorites Tweet"
   "User clicks Advertisement"
 
-While we cannot release the graph data used to train TwHIN embeddings due to privacy restrictions, heavily subsampled, anonymized open-sourced graph data can used:
+While we cannot release the graph data used to train TwHIN embeddings due to privacy restrictions, heavily subsampled, anonymized open-sourced graph data can be used:
 https://huggingface.co/datasets/Twitter/TwitterFollowGraph
 https://huggingface.co/datasets/Twitter/TwitterFaveGraph
 
