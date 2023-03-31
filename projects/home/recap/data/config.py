@@ -50,7 +50,7 @@ class DatasetConfig(base_config.BaseConfig):
     None, description="Number of shards to keep."
   )
   repeat_files: bool = pydantic.Field(
-    True, description="DEPRICATED. Files are repeated no matter what this is set to."
+    True, description="DEPRECATED. Files are repeated no matter what this is set to."
   )
   file_batch_size: pydantic.PositiveInt = pydantic.Field(16, description="File batch size")
 
@@ -211,7 +211,7 @@ class Sampler(base_config.BaseConfig):
   Only use this for quick experimentation.
   If samplers are useful, we should sample from upstream data generation.
 
-  DEPRICATED, DO NOT USE.
+  DEPRECATED, DO NOT USE.
   """
 
   name: str
@@ -234,7 +234,7 @@ class RecapDataConfig(DatasetConfig):
 
   sampler: Sampler = pydantic.Field(
     None,
-    description="""DEPRICATED, DO NOT USE. Sampling function for offline experiments.""",
+    description="""DEPRECATED, DO NOT USE. Sampling function for offline experiments.""",
   )
 
   @pydantic.root_validator()

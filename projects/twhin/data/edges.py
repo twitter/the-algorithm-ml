@@ -96,7 +96,7 @@ class EdgesDataset(Dataset):
 
     Returns a KeyedJaggedTensor used to look up all embeddings.
 
-    Note: We treat the lhs and rhs as though they're separate lookups: `len(lenghts) == 2 * bsz * len(tables)`.
+    Note: We treat the lhs and rhs as though they're separate lookups: `len(lengths) == 2 * bsz * len(tables)`.
     This differs from the DLRM pattern where we have `len(lengths) = bsz * len(tables)`.
 
     For the example above:
