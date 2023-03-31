@@ -115,7 +115,7 @@ def train(
     dataset: data iterator for the training set
     evaluation_iterators: data iterators for the different evaluation sets
     scheduler: optional learning rate scheduler
-    output_transform_for_metrics: optional transformation functions to transorm the model
+    output_transform_for_metrics: optional transformation functions to transform the model
                                   output and labels into a format the metrics can understand
   """
 
