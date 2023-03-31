@@ -1,0 +1,39 @@
+name: Python package
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+
+    steps:
+      - uses: actions/checkout@v3
+      # - uses: pre-commit/action@v3.0.0
+      #   name: Run pre-commit checks (pylint/yapf/isort)
+      #   env:
+      #     SKIP: insert-license
+      #   with:
+      #     extra_args: --hook-stage push --all-files
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: "pip" # caching pip dependencies
+      - name: install packages
+        run: |
+          /usr/bin/python -m pip install --upgrade pip
+          pip install --no-deps -r images/requirements.txt
+          # - name: ssh access
+          #   uses: lhotari/action-upterm@v1
+          #   with:
+          #     limit-access-to-actor: true
+          #     limit-access-to-users: arashd
+      - name: run tests
+        run: |
+          # Environment variables are reset in between steps.
+          mkdir /tmp/github_testing
+          ln -s $GITHUB_WORKSPACE /tmp/github_testing/tml
+          export PYTHONPATH="/tmp/github_testing:$PYTHONPATH"
+          pytest -vv
