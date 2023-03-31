@@ -42,8 +42,8 @@ def get_global_loss_detached(local_loss, reduction="mean"):
   """
   if reduction != "mean":
     logging.warn(
-      f"The reduction used in this function should be the same as the one used by "
-      f"the DDP model. By default DDP uses mean, So ensure that DDP is appropriately"
+      f"The reduction used in this function should be the same as the one used by"
+      f"the DDP model. By default DDP uses mean, so ensure that DDP is appropriately"
       f"modified for reduction {reduction}."
     )
 
