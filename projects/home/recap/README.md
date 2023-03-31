@@ -35,14 +35,19 @@ We cannot release the real training data due to privacy restrictions. However, w
 To try training the model (assuming you have already followed the repo setup instructions and are inside a virtualenv).
 
 Run
-$ ./projects/home/recap/scripts/create_random_data.sh
 
-This will create some random data (in $HOME/tmp/recap_local_random_data).
+```sh
+# This will create some random data (in $HOME/tmp/recap_local_random_data).
+./projects/home/recap/script/create_random_data.sh
+```
 
-$ ./projects/home/recap/scripts/run_local.sh
+```sh
+# This will train the model (for a small number of iterations).
+./projects/home/recap/script/run_local.sh
+```
 
-This will train the model (for a small number of iterations). Checkpoints and logs will be written to $HOME/tmp/runs/recap_local_debug.
+Checkpoints and logs will be written to `$HOME/tmp/runs/recap_local_debug`.
 
-The model training is configured through a yaml file (./projects/home/recap/config/local_prod.yaml).
+The model training is configured through a yaml file (`./projects/home/recap/config/local_prod.yaml`).
 
 The model architecture is a parallel masknet (https://arxiv.org/abs/2102.07619).
