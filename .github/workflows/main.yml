@@ -25,11 +25,7 @@ jobs:
         run: |
           /usr/bin/python -m pip install --upgrade pip
           pip install --no-deps -r images/requirements.txt
-          # - name: ssh access
-          #   uses: lhotari/action-upterm@v1
-          #   with:
-          #     limit-access-to-actor: true
-          #     limit-access-to-users: arashd
+          
       - name: run tests
         run: |
           # Environment variables are reset in between steps.
