@@ -10,7 +10,7 @@ Features (go/100_enablements):
 """
 import datetime
 import os
-from typing import Callable, Dict, Iterable, List, Mapping, Optional
+from typing import Callable, Dict, Iterable, List, Optional
 
 
 from tml.common import log_weights
