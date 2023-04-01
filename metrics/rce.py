@@ -178,7 +178,9 @@ class RCE(torchmetrics.Metric):
 
     pred_ce = self.binary_cross_entropy.compute()
 
-    return (1.0 - (pred_ce / baseline_ce)) * 100
+    rce = (1.0 - (pred_ce / baseline_ce)) * 100
+
+    return rce
 
   def reset(self):
     """

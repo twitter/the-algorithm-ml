@@ -50,7 +50,8 @@ def stable_mean_dist_reduce_fn(state: torch.Tensor) -> torch.Tensor:
     value=state[:, 0],
     weight=state[:, 1],
   )
-  return torch.stack([mean, weight_sum])
+  merged_accumulated_mean = torch.stack([mean, weight_sum])
+  return merged_accumulated_mean
 
 
 class StableMean(torchmetrics.Metric):
@@ -94,4 +95,5 @@ class StableMean(torchmetrics.Metric):
     """
     Compute and return the accumulated mean.
     """
-    return self.mean_and_weight_sum[0]
+    accumulated_mean = self.mean_and_weight_sum[0]
+    return accumulated_mean
