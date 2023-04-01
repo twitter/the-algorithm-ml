@@ -58,7 +58,7 @@ def test_task_dependent_ctr():
       "stuff": 0,
       "labels": torch.arange(0, 6).repeat(batch_size, 1),
     }
-    for idx in range(num_examples)
+    for _ in range(num_examples)
   ]
 
   for task_idx in range(5):
