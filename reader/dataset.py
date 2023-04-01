@@ -9,7 +9,6 @@ import functools
 import random
 from typing import Optional
 
-from fsspec.implementations.local
 import pyarrow.dataset as pads
 import pyarrow as pa
 import pyarrow.parquet
