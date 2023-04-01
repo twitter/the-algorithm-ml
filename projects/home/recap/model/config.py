@@ -18,7 +18,7 @@ class DropoutConfig(base_config.BaseConfig):
 
 
 class LayerNormConfig(base_config.BaseConfig):
-  """Configruation for the layer normalization."""
+  """Configuration for the layer normalization."""
 
   epsilon: float = pydantic.Field(
     1e-3, description="Small float added to variance to avoid dividing by zero."
@@ -107,14 +107,6 @@ class FeaturizationConfig(base_config.BaseConfig):
   double_norm_log_config: DoubleNormLogConfig = pydantic.Field(None, one_of="featurization")
   feature_names_to_concat: List[str] = pydantic.Field(
     ["binary"], description="Feature names to concatenate as raw values with continuous features."
-  )
-
-
-class DropoutConfig(base_config.BaseConfig):
-  """Configuration for the dropout layer."""
-
-  rate: pydantic.PositiveFloat = pydantic.Field(
-    0.1, description="Fraction of inputs to be dropped."
   )
 
 
