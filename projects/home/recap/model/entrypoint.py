@@ -149,7 +149,7 @@ class MultiTaskRankingModel(torch.nn.Module):
         neg_downsampling_rate=data_config.tasks[task_name].neg_downsampling_rate,
       )
 
-    self._task_names = list(config.tasks.keys())
+    self._task_names = [* config.tasks]
     self._towers = torch.nn.ModuleDict(_towers)
     self._affine_maps = torch.nn.ModuleDict(_affine_maps)
     self._calibrators = torch.nn.ModuleDict(_calibrators)

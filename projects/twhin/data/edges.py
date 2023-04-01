@@ -38,7 +38,7 @@ class EdgesDataset(Dataset):
 
     self.table_sizes = table_sizes
     self.num_tables = len(table_sizes)
-    self.table_names = list(table_sizes.keys())
+    self.table_names = [* table_sizes]
 
     self.relations = relations
     self.relations_t = torch.tensor(

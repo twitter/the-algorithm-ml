@@ -61,7 +61,7 @@ class LRShim(_LRScheduler):
   ):
     self.optimizer = optimizer
     self.lr_dict = lr_dict
-    self.group_names = list(self.lr_dict.keys())
+    self.group_names = [* self.lr_dict]
 
     num_param_groups = sum(1 for _, _optim in optimizer._optims for _ in _optim.param_groups)
     if num_param_groups != len(lr_dict):

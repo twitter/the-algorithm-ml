@@ -109,7 +109,7 @@ class Snapshot:
     """
     start_time = time.time()
     manifest = embedding_snapshot.get_manifest()
-    for path in manifest.keys():
+    for path in manifest:
       if path.startswith("0") and snapshot_emb_name in path:
         snapshot_path_to_load = path
     embedding_snapshot.read_object(snapshot_path_to_load, weight_tensor)

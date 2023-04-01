@@ -23,7 +23,7 @@ def weights_to_log(
   if not how_to_log:
     return
 
-  to_log = dict()
+  to_log = {}
   named_parameters = model.named_parameters()
   logging.info(f"Using DMP: {isinstance(model, DistributedModelParallel)}")
   if isinstance(model, DistributedModelParallel):
@@ -58,7 +58,7 @@ def log_ebc_norms(
       i.e. model.embeddings.ebc.embedding_bags.meta__user_id.weight
       sample_size: Limits number of rows per rank to compute average on to avoid OOM.
   """
-  norm_logs = dict()
+  norm_logs = {}
   for emb_key in ebc_keys:
     norms = (torch.ones(1, dtype=torch.float32) * -1).to(torch.device(f"cuda:{dist.get_rank()}"))
     if emb_key in model_state_dict:

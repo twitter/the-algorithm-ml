@@ -40,7 +40,7 @@ class RecapLRShim(torch.optim.lr_scheduler._LRScheduler):
   ):
     self.optimizer = optimizer
     self.lr_dict = lr_dict
-    self.group_names = list(self.lr_dict.keys())
+    self.group_names = [* self.lr_dict]
     self.emb_learning_rate = emb_learning_rate
 
     # We handle sparse LR scheduling separately, so only validate LR groups against dense param groups
@@ -146,7 +146,7 @@ def build_optimizer(
       )
     )
 
-  if not parameter_groups.keys() == all_learning_rates.keys():
+  if not parameter_groups == all_learning_rates:
     raise ValueError("Learning rates do not match optimizers")
 
   # If the optimiser is dense, model.fused_optimizer will be empty (but not None)

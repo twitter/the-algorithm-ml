@@ -16,7 +16,7 @@ def keyed_tensor_from_tensors_dict(
   Returns:
 
   """
-  keys = list(tensor_map.keys())
+  keys = [* tensor_map]
   # We expect batch size to be first dim. However, if we get a shape [Batch_size],
   # KeyedTensor will not find the correct batch_size. So, in those cases we make sure the shape is
   # [Batch_size x 1].
@@ -84,7 +84,7 @@ def keyed_jagged_tensor_from_tensors_dict(
   lengths = torch.cat(lengths, axis=0)
 
   return torchrec.KeyedJaggedTensor(
-    keys=list(tensor_map.keys()),
+    keys=[* tensor_map],
     values=values,
     lengths=lengths,
   )

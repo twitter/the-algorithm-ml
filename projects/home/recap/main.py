@@ -47,7 +47,7 @@ def run(unused_argv: str, data_service_dispatcher: Optional[str] = None):
 
   loss_fn = losses.build_multi_task_loss(
     loss_type=LossType.BCE_WITH_LOGITS,
-    tasks=list(config.model.tasks.keys()),
+    tasks=[* config.model.tasks],
     pos_weights=[task.pos_weight for task in config.model.tasks.values()],
   )
 

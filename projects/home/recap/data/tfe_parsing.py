@@ -25,7 +25,7 @@ def create_tf_example_schema(
     A dictionary schema suitable for deserializing tf.Example.
   """
   segdense_config = data_config.seg_dense_schema
-  labels = list(data_config.tasks.keys())
+  labels = [* data_config.tasks]
   used_features = (
     segdense_config.features + list(segdense_config.renamed_features.values()) + labels
   )
@@ -96,7 +96,7 @@ def parse_tf_example(
   # at TF level.
   # We should not return empty tensors if we dont use embeddings.
   # Otherwise, it breaks numpy->pt conversion
-  renamed_keys = list(seg_dense_schema_config.renamed_features.keys())
+  renamed_keys = [* seg_dense_schema_config.renamed_features]
   for renamed_key in renamed_keys:
     if "embedding" in renamed_key and (renamed_key not in inputs):
       inputs[renamed_key] = tf.zeros([], tf.float32)

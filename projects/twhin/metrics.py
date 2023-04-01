@@ -7,7 +7,7 @@ import tml.core.metrics as core_metrics
 def create_metrics(
   device: torch.device,
 ):
-  metrics = dict()
+  metrics = {}
   metrics.update(
     {
       "AUC": core_metrics.Auc(128),

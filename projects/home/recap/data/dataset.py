@@ -250,7 +250,7 @@ class RecapDataset(torch.utils.data.IterableDataset):
     vocab_mapper: tf.keras.Model = None,
   ):
     logging.info("***** Labels *****")
-    logging.info(list(data_config.tasks.keys()))
+    logging.info([* data_config.tasks])
 
     self._data_config = data_config
     self._parse_fn = get_seg_dense_parse_fn(data_config)
@@ -295,7 +295,7 @@ class RecapDataset(torch.utils.data.IterableDataset):
       add_weights=should_add_weights,
     )
 
-    sparse_feature_names = list(vocab_mapper.vocabs.keys()) if vocab_mapper else None
+    sparse_feature_names = [* vocab_mapper.vocabs] if vocab_mapper else None
 
     self._tf_dataset = self._create_tf_dataset()
 

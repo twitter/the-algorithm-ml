@@ -53,7 +53,7 @@ class BatchBase(Pipelineable, abc.ABC):
 class DataclassBatch(BatchBase):
   @classmethod
   def feature_names(cls):
-    return list(cls.__dataclass_fields__.keys())
+    return [* cls.__dataclass_fields__]
 
   def as_dict(self):
     return {
