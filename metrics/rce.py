@@ -21,7 +21,8 @@ def _smooth(
     label_smoothing: smoothing constant.
   Returns: Smoothed values.
   """
-  return value * (1.0 - label_smoothing) + 0.5 * label_smoothing
+  smoothed_values = value * (1.0 - label_smoothing) + 0.5 * label_smoothing
+  return smoothed_values
 
 
 def _binary_cross_entropy_with_clipping(
@@ -179,7 +180,6 @@ class RCE(torchmetrics.Metric):
     pred_ce = self.binary_cross_entropy.compute()
 
     rce = (1.0 - (pred_ce / baseline_ce)) * 100
-
     return rce
 
   def reset(self):

@@ -160,5 +160,5 @@ class AUROCWithMWU(torchmetrics.Metric):
 
     # Compute auroc with the weight set to 1/2 when positive & negative have identical scores.
     auroc = auroc_le - (auroc_le - auroc_lt) / 2.0
-
     return auroc
+  
