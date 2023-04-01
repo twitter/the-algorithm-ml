@@ -35,11 +35,11 @@ We cannot release the real training data due to privacy restrictions. However, w
 To try training the model (assuming you have already followed the repo setup instructions and are inside a virtualenv).
 
 Run
-$ ./projects/home/recap/scripts/create_random_data.sh
+$ ./projects/home/recap/script/create_random_data.sh
 
 This will create some random data (in $HOME/tmp/recap_local_random_data).
 
-$ ./projects/home/recap/scripts/run_local.sh
+$ ./projects/home/recap/script/run_local.sh
 
 This will train the model (for a small number of iterations). Checkpoints and logs will be written to $HOME/tmp/runs/recap_local_debug.
 
