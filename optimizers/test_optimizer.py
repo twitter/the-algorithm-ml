@@ -1,7 +1,7 @@
 import unittest
 import torch
 from tml.optimizers.config import LearningRate, OptimizerConfig
-from .optimizer import compute_lr, LRShim, get_optimizer_class, build_optimizer
+from optimizer import compute_lr, LRShim, get_optimizer_class, build_optimizer
 
 
 class TestComputeLR(unittest.TestCase):
