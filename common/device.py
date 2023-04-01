@@ -4,7 +4,7 @@ import torch
 import torch.distributed as dist
 
 
-def maybe_setup_tensorflow():
+def maybe_setup_tensorflow() -> None:
   try:
     import tensorflow as tf
   except ImportError:

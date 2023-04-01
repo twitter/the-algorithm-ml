@@ -2,7 +2,9 @@
 
 Mostly a test that it returns an object
 """
-from tml.common.filesystem import infer_fs
+from tml.common.filesystem import (
+  infer_fs,
+)
 
 
 def test_infer_fs():

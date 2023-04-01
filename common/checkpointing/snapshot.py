@@ -1,12 +1,24 @@
 import os
 import time
-from typing import Any, Dict, List, Optional
-
-from tml.ml_logging.torch_logging import logging
-from tml.common.filesystem import infer_fs, is_gcs_fs
+from typing import (
+  Any,
+  Dict,
+  Generator,
+  List,
+  Optional,
+)
 
 import torchsnapshot
-
+from tml.common.filesystem import (
+  infer_fs,
+  is_gcs_fs,
+)
+from tml.ml_logging.torch_logging import (
+  logging,
+)
+from torch import (
+  FloatTensor,
+)
 
 DONE_EVAL_SUBDIR = "evaled_by"
 GCS_PREFIX = "gs://"
@@ -25,7 +37,7 @@ class Snapshot:
     self.state["extra_state"] = torchsnapshot.StateDict(step=0, walltime=0.0)
 
   @property
-  def step(self):
+  def step(self) -> int:
     return self.state["extra_state"]["step"]
 
   @step.setter
@@ -33,14 +45,14 @@ class Snapshot:
     self.state["extra_state"]["step"] = step
 
   @property
-  def walltime(self):
+  def walltime(self) -> float:
     return self.state["extra_state"]["walltime"]
 
   @walltime.setter
   def walltime(self, walltime: float) -> None:
     self.state["extra_state"]["walltime"] = walltime
 
-  def save(self, global_step: int) -> "PendingSnapshot":
+  def save(self, global_step: int) -> "PendingSnapshot":  # type: ignore
     """Saves checkpoint with given global_step."""
     path = os.path.join(self.save_dir, str(global_step))
     logging.info(f"Saving snapshot global_step {global_step} to {path}.")
@@ -98,7 +110,7 @@ class Snapshot:
     cls,
     embedding_snapshot: torchsnapshot.Snapshot,
     snapshot_emb_name: str,
-    weight_tensor,
+    weight_tensor: FloatTensor,
   ) -> None:
     """Loads pretrained embedding from the snapshot to the model.
        Utilise partial lodaing meachanism from torchsnapshot.
@@ -128,11 +140,11 @@ def _eval_done_path(checkpoint_path: str, eval_partition: str) -> str:
   return os.path.join(_eval_subdir(checkpoint_path), f"{eval_partition}_DONE")
 
 
-def is_done_eval(checkpoint_path: str, eval_partition: str):
-  return get_checkpoint(checkpoint_path).exists(_eval_done_path(checkpoint_path, eval_partition))
+def is_done_eval(checkpoint_path: str, eval_partition: str) -> bool:
+  return get_checkpoint(checkpoint_path).exists(_eval_done_path(checkpoint_path, eval_partition))  # type: ignore[attr-defined]
 
 
-def mark_done_eval(checkpoint_path: str, eval_partition: str):
+def mark_done_eval(checkpoint_path: str, eval_partition: str) -> Any:
   infer_fs(checkpoint_path).touch(_eval_done_path(checkpoint_path, eval_partition))
 
 
@@ -140,7 +152,9 @@ def step_from_checkpoint(checkpoint: str) -> int:
   return int(os.path.basename(checkpoint))
 
 
-def checkpoints_iterator(save_dir: str, seconds_to_sleep: int = 30, timeout: int = 1800):
+def checkpoints_iterator(
+  save_dir: str, seconds_to_sleep: int = 30, timeout: int = 1800
+) -> Generator[str, None, None]:
   """Simplified equivalent of tf.train.checkpoints_iterator.
 
   Args:
@@ -149,7 +163,7 @@ def checkpoints_iterator(save_dir: str, seconds_to_sleep: int = 30, timeout: int
 
   """
 
-  def _poll(last_checkpoint: Optional[str] = None):
+  def _poll(last_checkpoint: Optional[str] = None) -> Optional[str]:
     stop_time = time.time() + timeout
     while True:
       _checkpoint_path = get_checkpoint(save_dir, missing_ok=True)

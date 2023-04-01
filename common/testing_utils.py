@@ -1,11 +1,16 @@
-from contextlib import contextmanager
 import datetime
 import os
-from unittest.mock import patch
+from contextlib import (
+  contextmanager,
+)
+from unittest.mock import (
+  patch,
+)
 
 import torch.distributed as dist
-from tml.ml_logging.torch_logging import logging
-
+from tml.ml_logging.torch_logging import (
+  logging,
+)
 
 MOCK_ENV = {
   "LOCAL_RANK": "0",
