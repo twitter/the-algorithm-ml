@@ -3,7 +3,7 @@ import unittest
 from tml.ml_logging.torch_logging import logging
 
 
-class Testtlogging(unittest.TestCase):
+class Testlogging(unittest.TestCase):
   def test_warn_once(self):
     with self.assertLogs(level="INFO") as captured_logs:
       logging.info("first info")
