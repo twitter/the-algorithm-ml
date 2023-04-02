@@ -6,7 +6,6 @@ Currently these are:
 
 2. TwHIN embeddings (projects/twhin) https://arxiv.org/abs/2202.05387
 
-
 This project can be run inside a python virtualenv. We have only tried this on Linux machines and because we use torchrec it works best with an Nvidia GPU. To setup run
 
 `./images/init_venv.sh` (Linux only).

@@ -82,7 +82,7 @@ class ZScoreLogConfig(base_config.BaseConfig):
   analysis_path: str
   schema_path: str = pydantic.Field(
     None,
-    description="Schema path which feaure statistics are generated with. Can be different from scehma in data config.",
+    description="Schema path which feature statistics are generated with. Can be different from scehma in data config.",
   )
   clip_magnitude: float = pydantic.Field(
     5.0, description="Threshold to clip the normalized input values."
