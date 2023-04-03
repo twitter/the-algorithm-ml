@@ -1,0 +1,47 @@
+<form>
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" required>
+  <label for="location">Location:</label>
+  <input type="text" id="location" name="location" required>
+  <label for="sustainable-practices">Sustainable Practices:</label>
+  <textarea id="sustainable-practices" name="sustainable-practices" rows="4" cols="50"></textarea>
+  <label for="interests">Interests:</label>
+  <textarea id="interests" name="interests" rows="4" cols="50"></textarea>
+  <input type="submit" value="Submit">
+</form>
+const form = document.querySelector('form');
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault(); // prevent default form submission
+  const name = document.getElementById('name').value;
+  const location = document.getElementById('location').value;
+  const sustainablePractices = document.getElementById('sustainable-practices').value;
+  const interests = document.getElementById('interests').value;
+  const data = {
+    name,
+    location,
+    sustainablePractices,
+    interests
+  };
+  fetch('/api/profile', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Profile created:', data);
+    // TODO: display success message and redirect to profile page
+  })
+  .catch(error => {
+    console.error('Error creating profile:', error);
+    // TODO: display error message
+  });
+});
