@@ -9,7 +9,7 @@ from tml.core import config as tml_config_mod
 import tml.projects.home.recap.config as recap_config_mod
 
 flags.DEFINE_string("config_path", None, "Path to hyperparameters for model.")
-flags.DEFINE_integer("n_examples", 100, "Numer of examples to generate.")
+flags.DEFINE_integer("n_examples", 100, "Number of examples to generate.")
 
 FLAGS = flags.FLAGS
 
