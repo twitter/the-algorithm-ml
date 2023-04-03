@@ -5,7 +5,11 @@ We assume multi task models will output [task_idx, ...] predictions
 """
 from typing import Any, Dict
 
-from tml.core.metric_mixin import MetricMixin, StratifyMixin, TaskMixin
+from tml.core.metric_mixin import (
+  MetricMixin,
+  StratifyMixin,
+  TaskMixin
+)
 
 import torch
 import torchmetrics as tm
