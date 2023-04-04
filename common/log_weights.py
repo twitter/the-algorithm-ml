@@ -74,7 +74,7 @@ def log_ebc_norms(
         : min(sample_size, emb_weight_tensor.shape[0])
       ]
       # WARNING: .cpu() transfer executes malloc that may be the cause of memory leaks
-      # Change sample_size if the you observe frequent OOM errors or remove weight logging.
+      # Change sample_size if the user observe frequent OOM errors or remove weight logging.
       norms = emb_weight_tensor[sample_mask].cpu().norm(dim=1).to(torch.float32)
       logging.info(f"Norm shape before reduction: {norms.shape}", rank=-1)
       norms = norms.mean().to(torch.device(f"cuda:{dist.get_rank()}"))
