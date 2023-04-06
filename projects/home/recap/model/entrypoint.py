@@ -9,7 +9,6 @@ from tml.projects.home.recap.model import mlp
 from tml.projects.home.recap.model import mask_net
 from tml.projects.home.recap.model import numeric_calibration
 from tml.projects.home.recap.model.model_and_loss import ModelAndLoss
-import tml.projects.home.recap.model.config as model_config_mod
 
 if TYPE_CHECKING:
   from tml.projects.home.recap import config as config_mod
