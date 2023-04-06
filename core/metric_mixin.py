@@ -22,7 +22,6 @@ for its update method.
 2. Redefine an existing metric class.
 
   SumMetric = prepend_transform(SumMetric, lambda outputs: {'value': 1})
-
 """
 from abc import abstractmethod
 from typing import Callable, Dict, List
@@ -88,7 +87,6 @@ def prepend_transform(base_metric: torchmetrics.Metric, transform: Callable):
 
   Functionally the same using inheritance, just saves some lines of code
   if no need for class attributes.
-
   """
 
   def transform_method(_self, *args, **kwargs):

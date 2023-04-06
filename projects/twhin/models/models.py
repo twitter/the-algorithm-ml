@@ -142,7 +142,6 @@ class TwhinModelAndLoss(torch.nn.Module):
     prefetching purposes during training using torchrec's pipeline.  However
     the underlying model signature needs to be exportable to onnx, requiring
     generic python types.  see https://pytorch.org/docs/stable/onnx.html#types.
-
     """
     outputs = self.model(batch)
     logits = outputs["logits"]

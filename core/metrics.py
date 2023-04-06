@@ -1,7 +1,6 @@
 """Common metrics that also support multi task.
 
 We assume multi task models will output [task_idx, ...] predictions
-
 """
 from typing import Any, Dict
 

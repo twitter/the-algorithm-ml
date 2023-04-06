@@ -1,7 +1,6 @@
 """
 Taken from https://raw.githubusercontent.com/pytorch/torchrec/v0.3.2/torchrec/distributed/train_pipeline.py
 with TrainPipelineSparseDist.progress modified to support gradient accumulation.
-
 """
 import abc
 from dataclasses import dataclass, field
@@ -529,7 +528,6 @@ class TrainPipelineSparseDist(TrainPipeline[In, Out]):
     optimizer update/reset is skipped for `_grad_accum` calls of `progress`
     (congruent to training steps), and then update/reset on every `_grad_accum`th
     step.
-
     """
     should_step_optimizer = (
       self._grad_accum is not None

@@ -27,7 +27,6 @@ class RecapLRShim(torch.optim.lr_scheduler._LRScheduler):
 
   This adheres to the torch.optim scheduler API and can be plugged anywhere that
   e.g. exponential decay can be used.
-
   """
 
   def __init__(

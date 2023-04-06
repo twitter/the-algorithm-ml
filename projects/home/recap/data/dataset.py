@@ -155,7 +155,6 @@ def get_explicit_datetime_inputs_files(explicit_datetime_inputs):
   Returns:
     data_files: Sorted list of files to read corresponding to data at the desired datetimes
     num_hours_missing: Number of hours that we are missing data
-
   """
   datetimes = get_datetimes(explicit_datetime_inputs)
   folders = [os.path.join(explicit_datetime_inputs.data_root, datetime) for datetime in datetimes]

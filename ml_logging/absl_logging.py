@@ -5,7 +5,6 @@
 Usage:
     >>> from twitter.ml.logging.absl_logging import logging
     >>> logging.info(f"Properly logged as INFO level in GCP Stackdriver.")
-
 """
 import logging as py_logging
 import sys

@@ -41,7 +41,6 @@ def _binary_cross_entropy_with_clipping(
     reduction: The reduction method to use.
 
   Returns: Binary cross entropy on the clipped predictions.
-
   """
   predictions = torch.clamp(predictions, epsilon, 1.0 - epsilon)
   bce = -target * torch.log(predictions + epsilon)
@@ -220,14 +219,12 @@ class NRCE(RCE):
             perform if it was well calibrated.
 
   .. note:: A big gap between NRCE and RCE might indicate a badly calibrated model,
-
   """
 
   def __init__(
     self, from_logits: bool = False, label_smoothing: float = 0, epsilon: float = 1e-7, **kwargs
   ):
     """
-
     Args:
       from_logits: whether or not predictions are logits or probabilities.
       label_smoothing: label smoothing constant.

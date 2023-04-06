@@ -1,5 +1,4 @@
-"""Extension of torchrec.dataset.utils.Batch to cover any dataset.
-"""
+"""Extension of torchrec.dataset.utils.Batch to cover any dataset."""
 # flake8: noqa
 from __future__ import annotations
 from typing import Dict

@@ -14,7 +14,6 @@ def keyed_tensor_from_tensors_dict(
     tensor_map:
 
   Returns:
-
   """
   keys = list(tensor_map.keys())
   # We expect batch size to be first dim. However, if we get a shape [Batch_size],
@@ -64,7 +63,6 @@ def keyed_jagged_tensor_from_tensors_dict(
     tensor_map:
 
   Returns:
-
   """
 
   if not tensor_map:

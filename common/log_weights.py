@@ -18,7 +18,6 @@ def weights_to_log(
     model: model to traverse.
     how_to_log: if a function, then applies this to every parameter, if a dict
       then only applies and logs specified parameters.
-
   """
   if not how_to_log:
     return
