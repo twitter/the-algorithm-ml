@@ -15,3 +15,8 @@ exclude = '''
   | dist
 )/
 '''
+
+[tool.isort]
+multi_line_output = 3
+line_length = 21
+include_trailing_comma = true

@@ -1,1 +1,4 @@
-from tml.common.checkpointing.snapshot import get_checkpoint, Snapshot
+from tml.common.checkpointing.snapshot import (
+  Snapshot,
+  get_checkpoint,
+)

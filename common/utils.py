@@ -1,18 +1,24 @@
-import yaml
 import getpass
 import os
 import string
-from typing import Tuple, Type, TypeVar
-
-from tml.core.config import base_config
+from typing import (
+  Tuple,
+  Type,
+  TypeVar,
+)
 
 import fsspec
+import yaml
+from tml.core.config import (
+  base_config,
+)
 
 C = TypeVar("C", bound=base_config.BaseConfig)
+T = TypeVar("T", str, bytes)
 
 
-def _read_file(f):
-  with fsspec.open(f) as f:
+def _read_file(file: T) -> T:
+  with fsspec.open(file) as f:
     return f.read()
 
 
@@ -34,7 +40,7 @@ def setup_configuration(
     The pydantic config object.
   """
 
-  def _substitute(s):
+  def _substitute(s: str) -> str:
     if substitute_env_variable:
       return string.Template(s).safe_substitute(os.environ, USER=getpass.getuser())
     return s

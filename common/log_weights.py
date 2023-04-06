@@ -1,17 +1,28 @@
 """For logging model weights."""
 import itertools
-from typing import Callable, Dict, List, Optional, Union
+from typing import (
+  Any,
+  Callable,
+  Dict,
+  List,
+  Optional,
+  Union,
+)
 
-from tml.ml_logging.torch_logging import logging  # type: ignore[attr-defined]
 import torch
 import torch.distributed as dist
-from torchrec.distributed.model_parallel import DistributedModelParallel
+from tml.ml_logging.torch_logging import (
+  logging,
+)
+from torchrec.distributed.model_parallel import (
+  DistributedModelParallel,
+)
 
 
 def weights_to_log(
   model: torch.nn.Module,
-  how_to_log: Optional[Union[Callable, Dict[str, Callable]]] = None,
-):
+  how_to_log: Optional[Union[Callable[[Any], Any], Dict[str, Callable[[Any], Any]]]] = None,
+) -> Optional[Dict[str, Any]]:
   """Creates dict of reduced weights to log to give sense of training.
 
   Args:
@@ -21,7 +32,7 @@ def weights_to_log(
 
   """
   if not how_to_log:
-    return
+    return None
 
   to_log = dict()
   named_parameters = model.named_parameters()
@@ -38,14 +49,14 @@ def weights_to_log(
       how = how_to_log
     else:
       how = how_to_log.get(param_name)  # type: ignore[assignment]
-    if not how:
-      continue  # type: ignore
+    if how is None:
+      continue
     to_log[f"model/{how.__name__}/{param_name}"] = how(params.detach()).cpu().numpy()
   return to_log
 
 
 def log_ebc_norms(
-  model_state_dict,
+  model_state_dict: Dict[str, Any],
   ebc_keys: List[str],
   sample_size: int = 4_000_000,
 ) -> Dict[str, torch.Tensor]:

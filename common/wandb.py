@@ -1,8 +1,11 @@
-from typing import Any, Dict, List
-
-import tml.core.config as base_config
+from typing import (
+  Any,
+  Dict,
+  List,
+)
 
 import pydantic
+import tml.core.config as base_config
 
 
 class WandbConfig(base_config.BaseConfig):

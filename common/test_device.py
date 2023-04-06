@@ -2,7 +2,9 @@
 
 Mostly a test that this can be imported properly even tho moved.
 """
-from unittest.mock import patch
+from unittest.mock import (
+  patch,
+)
 
 import tml.common.device as device_utils
 

@@ -1,30 +1,49 @@
 import os
 import subprocess
 import sys
-from typing import Optional
-
-from tml.ml_logging.torch_logging import logging  # type: ignore[attr-defined]
-from twitter.ml.tensorflow.experimental.distributed import utils
+from typing import (
+  Any,
+  Callable,
+  Dict,
+  Optional,
+  Protocol,
+  Tuple,
+  TypedDict,
+)
 
 import torch
 import torch.distributed.run
+from tml.ml_logging.torch_logging import (
+  logging,
+)
+from twitter.ml.tensorflow.experimental.distributed import (
+  utils,
+)
+from typing_extensions import (
+  Unpack,
+)
 
 
-def is_distributed_worker():
+class Fn(Protocol):
+  def __call__(self, *args: Tuple[str], **kwargs: Dict[str, Any]) -> None:
+    ...
+
+
+def is_distributed_worker() -> bool:
   world_size = os.environ.get("WORLD_SIZE", None)
   rank = os.environ.get("RANK", None)
   return world_size is not None and rank is not None
 
 
 def maybe_run_training(
-  train_fn,
-  module_name,
+  train_fn: Fn,
+  module_name: Any,
   nproc_per_node: Optional[int] = None,
-  num_nodes: Optional[int] = None,
+  num_nodes: Optional[int] = 0,
   set_python_path_in_subprocess: bool = False,
   is_chief: Optional[bool] = False,
-  **training_kwargs,
-):
+  **training_kwargs: Any,
+) -> None:
   """Wrapper function for single node, multi-GPU Pytorch training.
 
   If the necessary distributed Pytorch environment variables
@@ -73,7 +92,7 @@ def maybe_run_training(
     ]
     if nproc_per_node:
       cmd.extend(["--nproc_per_node", str(nproc_per_node)])
-    if num_nodes > 1:
+    if num_nodes and num_nodes > 1:
       cluster_resolver = utils.cluster_resolver()
       backend_address = cluster_resolver.cluster_spec().task_address("chief", 0)
       cmd.extend(

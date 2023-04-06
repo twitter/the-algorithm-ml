@@ -1,13 +1,25 @@
-from tml.common.modules.embedding.config import LargeEmbeddingsConfig, DataType
-from tml.ml_logging.torch_logging import logging
-
-import torch
-from torch import nn
-import torchrec
-from torchrec.modules import embedding_configs
-from torchrec import EmbeddingBagConfig, EmbeddingBagCollection
-from torchrec.sparse.jagged_tensor import KeyedJaggedTensor, KeyedTensor
 import numpy as np
+import torch
+import torchrec
+from tml.common.modules.embedding.config import (
+  DataType,
+  LargeEmbeddingsConfig,
+)
+from tml.ml_logging.torch_logging import (
+  logging,
+)
+from torch import nn
+from torchrec import (
+  EmbeddingBagCollection,
+  EmbeddingBagConfig,
+)
+from torchrec.modules import (
+  embedding_configs,
+)
+from torchrec.sparse.jagged_tensor import (
+  KeyedJaggedTensor,
+  KeyedTensor,
+)
 
 
 class LargeEmbeddings(nn.Module):

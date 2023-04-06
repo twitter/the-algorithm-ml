@@ -1,10 +1,13 @@
-from typing import List
 from enum import Enum
-
-import tml.core.config as base_config
-from tml.optimizers.config import OptimizerConfig
+from typing import (
+  List,
+)
 
 import pydantic
+import tml.core.config as base_config
+from tml.optimizers.config import (
+  OptimizerConfig,
+)
 
 
 class DataType(str, Enum):
