@@ -1,6 +1,6 @@
 #! /bin/sh
 
-if [[ "$(uname)" == "Darwin" ]]; then
+if [[ "$(uname)" != "Linux" ]]; then
   echo "Only supported on Linux."
   exit 1
 fi
