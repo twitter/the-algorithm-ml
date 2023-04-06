@@ -1,6 +1,5 @@
 import json
 import os
-from typing import List
 
 
 KF_DDS_PORT: int = 5050
