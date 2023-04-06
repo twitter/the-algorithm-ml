@@ -101,7 +101,7 @@ class Snapshot:
     weight_tensor,
   ) -> None:
     """Loads pretrained embedding from the snapshot to the model.
-       Utilise partial lodaing meachanism from torchsnapshot.
+       Utilise partial lodaing mechanism from torchsnapshot.
     Args:
       embedding_snapshot: Path to the snapshot containing pretrained embeddings (EBC).
       snapshot_emb_name: Name of the layer in the *snapshot* model, containing the EBC.

@@ -398,7 +398,7 @@ class RecapDataset(torch.utils.data.IterableDataset):
         )
     else:
       raise ValueError(
-        "Must specifiy either `inputs`, `explicit_datetime_inputs`, or `explicit_date_inputs` in data_config"
+        "Must specify either `inputs`, `explicit_datetime_inputs`, or `explicit_date_inputs` in data_config"
       )
 
     num_files = len(filenames)

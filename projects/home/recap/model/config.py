@@ -18,7 +18,7 @@ class DropoutConfig(base_config.BaseConfig):
 
 
 class LayerNormConfig(base_config.BaseConfig):
-  """Configruation for the layer normalization."""
+  """Configuration for the layer normalization."""
 
   epsilon: float = pydantic.Field(
     1e-3, description="Small float added to variance to avoid dividing by zero."
@@ -91,7 +91,7 @@ class ZScoreLogConfig(base_config.BaseConfig):
     False, description="Option to use batch normalization on the inputs."
   )
   use_renorm: bool = pydantic.Field(
-    False, description="Option to use batch renormalization for trainig and serving consistency."
+    False, description="Option to use batch renormalization for training and serving consistency."
   )
   use_bq_stats: bool = pydantic.Field(
     False, description="Option to load the partitioned json files from BQ as statistics."
