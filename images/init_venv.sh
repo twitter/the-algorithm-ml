@@ -1,12 +1,7 @@
 #! /bin/sh
 
-if [[ "$(uname)" == "Darwin" ]]; then
-  echo "Only supported on Linux."
-  exit 1
-fi
-
 # You may need to point this to a version of python 3.10
-PYTHONBIN="/opt/ee/python/3.10/bin/python3.10"
+PYTHONBIN="where python"
 echo Using "PYTHONBIN=$PYTHONBIN"
 
 # Put venv in tmp, these things are not made to last, just rebuild.
