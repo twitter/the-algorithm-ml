@@ -21,8 +21,7 @@ def roundrobin(*iterables):
   while num_active:
     try:
       for _next in nexts:
-        result = _next()
-        yield result
+        yield _next()
     except StopIteration:
       # Remove the iterator we just exhausted from the cycle.
       num_active -= 1
