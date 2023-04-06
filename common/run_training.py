@@ -32,7 +32,7 @@ def maybe_run_training(
   `train_fn(**training_kwargs)`.
 
   Otherwise, this function calls torchrun and points at the calling module
-  `module_name`.  After this call, the necessary environment variables are set
+  `module_name`. After this call, the necessary environment variables are set
   and training will commence.
 
   Args:

@@ -9,7 +9,7 @@ def keyed_tensor_from_tensors_dict(
   tensor_map: Mapping[str, torch.Tensor]
 ) -> "torchrec.KeyedTensor":
   """
-  Convert a dictionary of torch tensor to torchrec keyed tensor
+  Converts a dictionary of torch tensor to torchrec keyed tensor
   Args:
     tensor_map:
 
@@ -40,7 +40,7 @@ def _compute_jagged_tensor_from_tensor(tensor: torch.Tensor) -> Tuple[torch.Tens
 
 def jagged_tensor_from_tensor(tensor: torch.Tensor) -> "torchrec.JaggedTensor":
   """
-  Convert a torch tensor to torchrec jagged tensor.
+  Converts a torch tensor to torchrec jagged tensor.
   Note: Currently only support shape of [Batch_size] or [Batch_size x N] for dense tensors.
         For sparse tensor the shape of .values() should be [Batch_size] or [Batch_size x N]; the
           dense_shape of the sparse tensor can be arbitrary.

@@ -15,7 +15,7 @@ class ModelAndLoss(torch.nn.Module):
     Args:
       model: torch module to wrap.
       loss_fn: Function for calculating loss, should accept logits and labels.
-      straitifiers: mapping of stratifier name and index of discrete features to emit for metrics stratification.
+      straitifiers: mapping of a stratifier name and index of discrete features to emit for metrics stratification.
     """
     super().__init__()
     self.model = model

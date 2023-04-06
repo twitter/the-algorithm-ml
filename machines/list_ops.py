@@ -1,7 +1,7 @@
 """
 Simple str.split() parsing of input string
 
-usage example:
+Usage example:
   python list_ops.py --input_list=$INPUT [--sep=","] [--op=<len|select>] [--elem=$INDEX]
 
 Args:

@@ -51,7 +51,7 @@ class TruncateAndSlice(tf.keras.Model):
 
 
 class DownCast(tf.keras.Model):
-  """Class for Down casting dataset before serialization and transferring to training host.
+  """Class for Down-casting dataset before serialization and transferring to training host.
   Depends on the data type and the actual data range, the down casting can be lossless or not.
   It is strongly recommended to compare the metrics before and after down casting.
   """
