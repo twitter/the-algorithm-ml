@@ -73,7 +73,7 @@ author (real_time)
 </td>
 <td>
 <code>
-timelines.enagagement.is_retweeted_without_quote <br>
+timelines.engagement.is_retweeted_without_quote <br>
 timelines.engagement.is_clicked <br>
 timelines.engagement.is_dont_like <br>
 timelines.engagement.is_dwelled <br>
@@ -112,7 +112,7 @@ original_author (real_time)
 </td>
 <td>
 <code>
-timelines.enagagement.is_retweeted_without_quote <br>
+timelines.engagement.is_retweeted_without_quote <br>
 timelines.engagement.is_clicked <br>
 timelines.engagement.is_dont_like <br>
 timelines.engagement.is_dwelled <br>
@@ -544,7 +544,7 @@ user (real_time)
 </td>
 <td>
 <code>
-timelines.enagagement.is_retweeted_without_quote<br>
+timelines.engagement.is_retweeted_without_quote<br>
 timelines.engagement.is_clicked<br>
 timelines.engagement.is_dont_like<br>
 timelines.engagement.is_dwelled<br>
@@ -585,7 +585,7 @@ user (48h_real_time_v5)
 </td>
 <td>
 <code>
-timelines.enagagement.is_retweeted_without_quote<br>
+timelines.engagement.is_retweeted_without_quote<br>
 timelines.engagement.is_clicked<br>
 timelines.engagement.is_dont_like<br>
 timelines.engagement.is_dwelled<br>
@@ -1422,7 +1422,7 @@ topic (real_time)
 </td>
 <td>
 <code>
-timelines.enagagement.is_retweeted_without_quote <br>
+timelines.engagement.is_retweeted_without_quote <br>
 timelines.engagement.is_clicked <br>
 timelines.engagement.is_dont_like <br>
 timelines.engagement.is_dwelled <br>
@@ -1460,7 +1460,7 @@ topic (24_hour_real_time)
 </code>
 </td>
 <td>
-<code>timelines.enagagement.is_retweeted_without_quote<br>
+<code>timelines.engagement.is_retweeted_without_quote<br>
 timelines.engagement.is_block_clicked<br>
 timelines.engagement.is_clicked<br>
 timelines.engagement.is_dont_like<br>
@@ -1552,7 +1552,7 @@ These features aggregate values corresponding to a tweet.
 <tr>
 <td><code>tweet (real_time)</code></td>
 <td><code>
-timelines.enagagement.is_retweeted_without_quote<br>
+timelines.engagement.is_retweeted_without_quote<br>
 timelines.engagement.is_clicked<br>
 timelines.engagement.is_dont_like<br>
 timelines.engagement.is_dwelled<br>
@@ -1954,7 +1954,7 @@ recap.tweetfeature.match_ui_lang <br>
 recap.tweetfeature.mention_searcher <br>
 recap.tweetfeature.num_hashtags <br>
 recap.tweetfeature.num_mentions <br>
-recap.tweetfeature.prev_user_tweet_enagagement <br>
+recap.tweetfeature.prev_user_tweet_engagement <br>
 recap.tweetfeature.reply_other <br>
 recap.tweetfeature.reply_searcher <br>
 recap.tweetfeature.retweet_other <br>
@@ -2040,10 +2040,10 @@ tweetsource.v2.tweet.media.num_color_pallette_items <br>
 tweetsource.v2.tweet.media.num_faces <br> 
 tweetsource.v2.tweet.media.num_stickers <br> 
 tweetsource.v2.tweet.media.view_count <br> 
+</code>
 </td>
 </tr>
 </table>
-</code>
 </details>
 
 <details>
@@ -2081,7 +2081,7 @@ in_reply_to_tweet.recap.tweetfeature.is_offensive <br>
 in_reply_to_tweet.recap.tweetfeature.is_reply <br>
 in_reply_to_tweet.recap.tweetfeature.is_sensitive <br>
 in_reply_to_tweet.recap.tweetfeature.num_mentions <br>
-in_reply_to_tweet.recap.tweetfeature.prev_user_tweet_enagagement <br>
+in_reply_to_tweet.recap.tweetfeature.prev_user_tweet_engagement <br>
 in_reply_to_tweet.recap.tweetfeature.unidirectiona_fav_count <br>
 in_reply_to_tweet.recap.tweetfeature.unidirectional_reply_count <br>
 in_reply_to_tweet.recap.tweetfeature.unidirectional_retweet_count <br>
@@ -2109,7 +2109,6 @@ in_reply_to_tweet.tweetsource.tweet.text.num_caps <br>
 </td>
 </tr>
 </table>
-</code>
 </details>
 
 <details>
@@ -2265,3 +2264,4 @@ We have two embeddings trained on the user-user follow graph, one representing w
 <summary><b><code>Twhin Engagement Embeddings</code></b></summary>
 <br>
 We have one embedding trained on the user-tweet engagement graph, representing users based on the Tweets they are likely to engage with. This embedding is 200 dimensional.
+</details>

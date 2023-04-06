@@ -1,6 +1,6 @@
 """This is a very limited feature training loop useful for interactive debugging.
 
-It is not intended for actual model tranining (it is not fast, doesn't compile the model).
+It is not intended for actual model training (it is not fast, doesn't compile the model).
 It does not support checkpointing.
 
 suggested use:

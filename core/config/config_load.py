@@ -11,7 +11,7 @@ def load_config_from_yaml(config_type: Type[BaseConfig], yaml_path: str):
   """Recommend method to load a config file (a yaml file) and parse it.
 
   Because we have a shared filesystem the recommended route to running jobs it put modified config
-  files with the desired parameters somewhere on the filesytem and run jobs pointing to them.
+  files with the desired parameters somewhere on the filesystem and run jobs pointing to them.
   """
 
   def _substitute(s):

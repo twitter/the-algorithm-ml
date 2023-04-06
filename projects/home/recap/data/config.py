@@ -50,7 +50,7 @@ class DatasetConfig(base_config.BaseConfig):
     None, description="Number of shards to keep."
   )
   repeat_files: bool = pydantic.Field(
-    True, description="DEPRICATED. Files are repeated no matter what this is set to."
+    True, description="Deprecated. Files are repeated no matter what this is set to."
   )
   file_batch_size: pydantic.PositiveInt = pydantic.Field(16, description="File batch size")
 

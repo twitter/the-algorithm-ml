@@ -15,7 +15,7 @@ def create_tf_example_schema(
   data_config: recap_data_config.SegDenseSchema,
   segdense_schema,
 ):
-  """Generate schema for deseralizing tf.Example.
+  """Generate schema for deserializing tf.Example.
 
   Args:
     segdense_schema: List of dicts of segdense features (includes feature_name, dtype, length).
@@ -58,12 +58,12 @@ def create_tf_example_schema(
 
 @functools.lru_cache(1)
 def make_mantissa_mask(mask_length: int) -> tf.Tensor:
-  """For experimentating with emulating bfloat16 or less precise types."""
+  """For experimenting with emulating bfloat16 or less precise types."""
   return tf.constant((1 << 32) - (1 << mask_length), dtype=tf.int32)
 
 
 def mask_mantissa(tensor: tf.Tensor, mask_length: int) -> tf.Tensor:
-  """For experimentating with emulating bfloat16 or less precise types."""
+  """For experimenting with emulating bfloat16 or less precise types."""
   mask: tf.Tensor = make_mantissa_mask(mask_length)
   return tf.bitcast(tf.bitwise.bitwise_and(tf.bitcast(tensor, tf.int32), mask), tensor.dtype)
 
