@@ -4,7 +4,6 @@ from tml.core.config import BaseConfig, load_config_from_yaml
 
 import pydantic
 import getpass
-import pydantic
 
 
 class _PointlessConfig(BaseConfig):
