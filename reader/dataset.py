@@ -9,7 +9,6 @@ import functools
 import random
 from typing import Optional
 
-from fsspec.implementations.local import LocalFileSystem
 import pyarrow.dataset as pads
 import pyarrow as pa
 import pyarrow.parquet
@@ -105,7 +104,7 @@ class Dataset(torch.utils.data.IterableDataset):
   def dataloader(self, remote: bool = False):
     if not remote:
       return map(self.pa_to_batch, self.to_batches())
-    readers = get_readers(2)
+    readers = get_readers()
     return map(self.pa_to_batch, reader_utils.roundrobin(*readers))
 
 
@@ -116,7 +115,7 @@ GRPC_OPTIONS = [
 ]
 
 
-def get_readers(num_readers_per_worker: int):
+def get_readers():
   addresses = env.get_flight_server_addresses()
 
   readers = []
