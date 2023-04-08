@@ -33,3 +33,6 @@ pip-delete-this-directory.txt
 .hypothesis
 
 venv
+
+# pycharm files
+.idea
