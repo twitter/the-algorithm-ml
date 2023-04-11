@@ -18,7 +18,7 @@ class Mlp(torch.nn.Module):
     self._mlp_config = mlp_config
     input_size = in_features
     layer_sizes = mlp_config.layer_sizes
-    modules = []
+    modules = torch.nn.ModuleList()
     for layer_size in layer_sizes[:-1]:
       modules.append(torch.nn.Linear(input_size, layer_size, bias=True))
 
