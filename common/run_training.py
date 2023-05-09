@@ -51,6 +51,7 @@ def maybe_run_training(
     num_nodes = 1
     if machines.num_workers:
       num_nodes += machines.num_workers
+      time.sleep(400)
 
   if is_distributed_worker():
     # world_size, rank, etc are set; assuming any other env vars are set (checks to come)

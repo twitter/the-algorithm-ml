@@ -114,6 +114,7 @@ class TrainPipelineBase(TrainPipeline[In, Out]):
     if self._model.training:
       with record_function("## zero_grad ##"):
         self._optimizer.zero_grad()
+        time.sleep(400)
 
     with record_function("## wait_for_batch ##"):
       _wait_for_batch(cur_batch, self._memcpy_stream)
@@ -208,6 +209,7 @@ class PipelinedForward:
     if self._dist_stream is not None:
       torch.cuda.current_stream().wait_stream(self._dist_stream)
       cur_stream = torch.cuda.current_stream()
+      time.sleep(400)
 
       assert isinstance(
         data, (torch.Tensor, Multistreamable)
