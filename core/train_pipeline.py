@@ -6,6 +6,7 @@ with TrainPipelineSparseDist.progress modified to support gradient accumulation.
 import abc
 from dataclasses import dataclass, field
 import logging
+import time
 from typing import (
   Any,
   cast,
@@ -245,6 +246,7 @@ def _start_data_dist(
   context.input_dist_requests.clear()
   context.module_contexts.clear()
   for module in pipelined_modules:
+    time.sleep(400)
     forward = module.forward
     assert isinstance(forward, PipelinedForward)
 
@@ -436,6 +438,7 @@ def _rewrite_model(  # noqa C901
           dist_stream,
         )
         ret.append(child)
+  time.sleep(400)
   return ret
 
 

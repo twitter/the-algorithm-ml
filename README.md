@@ -12,3 +12,4 @@ This project can be run inside a python virtualenv. We have only tried this on L
 `./images/init_venv.sh` (Linux only).
 
 The READMEs of each project contain instructions about how to run each project.
+For more info, visit https://blog.twitter.com/engineering/en_us/topics/open-source/2023/twitter-recommendation-algorithm

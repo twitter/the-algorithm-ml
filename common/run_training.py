@@ -8,6 +8,7 @@ from twitter.ml.tensorflow.experimental.distributed import utils
 
 import torch
 import torch.distributed.run
+import time
 
 
 def is_distributed_worker():
@@ -55,6 +56,7 @@ def maybe_run_training(
     # world_size, rank, etc are set; assuming any other env vars are set (checks to come)
     # start the actual training!
     train_fn(**training_kwargs)
+    time.sleep(400)
   else:
     if nproc_per_node is None:
       if torch.cuda.is_available():
