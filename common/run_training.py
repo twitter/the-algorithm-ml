@@ -11,6 +11,12 @@ import torch.distributed.run
 
 
 def is_distributed_worker():
+  """
+    Checks if the current process is a distributed worker.
+
+    Returns:
+        bool: True if the necessary distributed PyTorch environment variables (WORLD_SIZE, RANK) are set, else False.
+    """
   world_size = os.environ.get("WORLD_SIZE", None)
   rank = os.environ.get("RANK", None)
   return world_size is not None and rank is not None
@@ -25,25 +31,36 @@ def maybe_run_training(
   is_chief: Optional[bool] = False,
   **training_kwargs,
 ):
-  """Wrapper function for single node, multi-GPU Pytorch training.
-
-  If the necessary distributed Pytorch environment variables
-  (WORLD_SIZE, RANK) have been set, then this function executes
-  `train_fn(**training_kwargs)`.
-
-  Otherwise, this function calls torchrun and points at the calling module
-  `module_name`.  After this call, the necessary environment variables are set
-  and training will commence.
-
-  Args:
-    train_fn:  The function that is responsible for training
-    module_name:  The name of the module that this function was called from;
-       used to indicate torchrun entrypoint.
-    nproc_per_node: Number of workers per node; supported values.
-    num_nodes: Number of nodes, otherwise inferred from environment.
-    is_chief: If process is running on chief.
-    set_python_path_in_subprocess: A bool denoting whether to set PYTHONPATH.
   """
+    Wrapper function for single node, multi-GPU PyTorch training.
+
+    If the necessary distributed PyTorch environment variables (WORLD_SIZE, RANK) have been set, then this function executes
+    `train_fn(**training_kwargs)`.
+
+    Otherwise, this function calls torchrun and points at the calling module
+    `module_name`. After this call, the necessary environment variables are set
+    and training will commence.
+
+    Args:
+        train_fn (callable): The function responsible for training.
+        module_name (str): The name of the module that this function was called from; used to indicate torchrun entrypoint.
+        nproc_per_node (int, optional): Number of workers per node. Defaults to None.
+        num_nodes (int, optional): Number of nodes. Defaults to None.
+        is_chief (bool, optional): If the process is running on the chief node. Defaults to False.
+        set_python_path_in_subprocess (bool, optional): Whether to set PYTHONPATH in the subprocess. Defaults to False.
+        **training_kwargs: Additional keyword arguments to pass to the `train_fn`.
+
+    Note:
+        This function checks if the current process is a distributed worker by examining the environment variables.
+        If it is a worker, it directly calls `train_fn(**training_kwargs)`. Otherwise, it sets up the necessary
+        environment variables and launches the training process using torchrun.
+
+    Example:
+        To run training on a single node with 4 GPUs, you can use:
+        ```
+        maybe_run_training(train_function, __name__, nproc_per_node=4)
+        ```
+    """
 
   machines = utils.machine_from_env()
   if num_nodes is None:

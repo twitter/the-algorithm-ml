@@ -9,6 +9,14 @@ import pydantic
 
 
 class RuntimeConfig(base_config.BaseConfig):
+  """
+    Configuration for runtime settings.
+    
+    Attributes:
+    - wandb (Optional[WandbConfig]): Configuration for Wandb (Weights and Biases) integration.
+    - enable_tensorfloat32 (bool): Enable tensorfloat32 if on Ampere devices.
+    - enable_amp (bool): Enable automatic mixed precision.
+    """
   wandb: WandbConfig = pydantic.Field(None)
   enable_tensorfloat32: bool = pydantic.Field(
     False, description="Use tensorfloat32 if on Ampere devices."
@@ -17,6 +25,22 @@ class RuntimeConfig(base_config.BaseConfig):
 
 
 class TrainingConfig(base_config.BaseConfig):
+  """
+    Configuration for training settings.
+    
+    Attributes:
+    - save_dir (str): Directory to save checkpoints.
+    - num_train_steps (pydantic.PositiveInt): Number of training steps.
+    - initial_checkpoint_dir (str): Directory of initial checkpoints (optional).
+    - checkpoint_every_n (pydantic.PositiveInt): Save checkpoints every 'n' steps.
+    - checkpoint_max_to_keep (pydantic.PositiveInt): Maximum number of checkpoints to keep (optional).
+    - train_log_every_n (pydantic.PositiveInt): Log training information every 'n' steps.
+    - num_eval_steps (int): Number of evaluation steps. If < 0, the entire dataset will be used.
+    - eval_log_every_n (pydantic.PositiveInt): Log evaluation information every 'n' steps.
+    - eval_timeout_in_s (pydantic.PositiveFloat): Evaluation timeout in seconds.
+    - gradient_accumulation (int): Number of replica steps to accumulate gradients (optional).
+    - num_epochs (pydantic.PositiveInt): Number of training epochs.
+    """
   save_dir: str = pydantic.Field("/tmp/model", description="Directory to save checkpoints.")
   num_train_steps: pydantic.PositiveInt = 10000
   initial_checkpoint_dir: str = pydantic.Field(

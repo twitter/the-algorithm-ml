@@ -19,6 +19,23 @@ MOCK_ENV = {
 
 @contextmanager
 def mock_pg():
+  """
+    A context manager for mocking the distributed process group for testing purposes.
+
+    This context manager temporarily sets environment variables to mock the distributed process group
+    and initializes it using the Gloo backend. It is useful for testing distributed training without
+    actually launching multiple processes.
+
+    Example:
+        ```python
+        with mock_pg():
+            # Your distributed training code here
+        ```
+
+    Note:
+        This context manager should be used within a testing environment to simulate distributed training
+        without actually creating multiple processes.
+    """
   with patch.dict(os.environ, MOCK_ENV):
     try:
       dist.init_process_group(

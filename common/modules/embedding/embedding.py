@@ -11,6 +11,20 @@ import numpy as np
 
 
 class LargeEmbeddings(nn.Module):
+  """
+    A module for handling large embeddings.
+
+    Args:
+        large_embeddings_config (LargeEmbeddingsConfig): The configuration for large embeddings.
+
+    Attributes:
+        ebc (EmbeddingBagCollection): An instance of EmbeddingBagCollection for managing embeddings.
+        surgery_cut_point (torch.nn.Identity): A hook for performing post-processing surgery on large embedding models.
+
+    Note:
+        The `surgery_cut_point` attribute is used for post-processing surgery on large embedding models to prepare them for serving.
+
+    """
   def __init__(
     self,
     large_embeddings_config: LargeEmbeddingsConfig,
@@ -52,6 +66,16 @@ class LargeEmbeddings(nn.Module):
     self,
     sparse_features: KeyedJaggedTensor,
   ) -> KeyedTensor:
+    """
+        Forward pass of the LargeEmbeddings module.
+
+        Args:
+            sparse_features (KeyedJaggedTensor): Sparse input features.
+
+        Returns:
+            KeyedTensor: The output of the forward pass, a KeyedTensor.
+
+        """
     pooled_embs = self.ebc(sparse_features)
 
     # a KeyedTensor

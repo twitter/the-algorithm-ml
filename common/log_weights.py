@@ -49,15 +49,25 @@ def log_ebc_norms(
   ebc_keys: List[str],
   sample_size: int = 4_000_000,
 ) -> Dict[str, torch.Tensor]:
-  """Logs the norms of the embedding tables as specified by ebc_keys.
-  As of now, log average norm per rank.
-
-  Args:
-      model_state_dict: model.state_dict()
-      ebc_keys: list of embedding keys from state_dict to log. Must contain full name,
-      i.e. model.embeddings.ebc.embedding_bags.meta__user_id.weight
-      sample_size: Limits number of rows per rank to compute average on to avoid OOM.
   """
+    Logs the norms of the embedding tables as specified by ebc_keys.
+    As of now, log average norm per rank.
+
+    Args:
+        model_state_dict (dict): The state dictionary of the model.
+        ebc_keys (List[str]): List of embedding keys from state_dict to log.
+            Each key must contain the full name, e.g., "model.embeddings.ebc.embedding_bags.meta__user_id.weight".
+        sample_size (int, optional): Limits the number of rows per rank to compute average on
+            to avoid out-of-memory (OOM) errors. Defaults to 4,000,000.
+
+    Returns:
+        Dict[str, torch.Tensor]: A dictionary containing the computed norms of the embedding tables.
+            The keys are in the format "{emb_key}-norm-{idx}".
+
+    Note:
+        This function computes and logs the average norm of embedding tables across ranks.
+        It gathers the norms from all ranks and returns them as a dictionary.
+    """
   norm_logs = dict()
   for emb_key in ebc_keys:
     norms = (torch.ones(1, dtype=torch.float32) * -1).to(torch.device(f"cuda:{dist.get_rank()}"))
