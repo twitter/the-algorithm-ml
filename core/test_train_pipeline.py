@@ -11,23 +11,60 @@ from torchrec.distributed import DistributedModelParallel
 
 @dataclass
 class MockDataclassBatch(DataclassBatch):
+  """
+    Mock data class batch for testing purposes.
+
+    This class represents a batch of data with continuous features and labels.
+
+    Attributes:
+        continuous_features (torch.Tensor): Tensor containing continuous feature data.
+        labels (torch.Tensor): Tensor containing label data.
+    """
   continuous_features: torch.Tensor
   labels: torch.Tensor
 
 
 class MockModule(torch.nn.Module):
+  """
+    Mock PyTorch module for testing purposes.
+
+    This module defines a simple neural network model with a linear layer
+    followed by a BCEWithLogitsLoss loss function.
+
+    Attributes:
+        model (torch.nn.Linear): The linear model layer.
+        loss_fn (torch.nn.BCEWithLogitsLoss): Binary cross-entropy loss function.
+    """
   def __init__(self) -> None:
     super().__init__()
     self.model = torch.nn.Linear(10, 1)
     self.loss_fn = torch.nn.BCEWithLogitsLoss()
 
   def forward(self, batch: MockDataclassBatch) -> Tuple[torch.Tensor, torch.Tensor]:
+    """
+        Forward pass of the mock module.
+
+        Args:
+            batch (MockDataclassBatch): Input data batch with continuous features and labels.
+
+        Returns:
+            Tuple[torch.Tensor, torch.Tensor]: A tuple containing the loss and predictions.
+        """
     pred = self.model(batch.continuous_features)
     loss = self.loss_fn(pred, batch.labels)
     return (loss, pred)
 
 
 def create_batch(bsz: int):
+  """
+    Create a mock data batch with random continuous features and labels.
+
+    Args:
+        bsz (int): Batch size.
+
+    Returns:
+        MockDataclassBatch: A batch of data with continuous features and labels.
+    """
   return MockDataclassBatch(
     continuous_features=torch.rand(bsz, 10).float(),
     labels=torch.bernoulli(torch.empty(bsz, 1).uniform_(0, 1)).float(),
@@ -35,6 +72,13 @@ def create_batch(bsz: int):
 
 
 def test_sparse_pipeline():
+  """
+    Test function for the sparse pipeline with distributed model parallelism.
+
+    This function tests the behavior of the sparse training pipeline using
+    a mock module and data.
+    """
+
   device = torch.device("cpu")
   model = MockModule().to(device)
 
@@ -65,6 +109,15 @@ def test_sparse_pipeline():
 
 
 def test_amp():
+  """
+    Test automatic mixed-precision (AMP) training with the sparse pipeline.
+
+    This function tests the behavior of the sparse training pipeline with
+    automatic mixed-precision (AMP) enabled, using a mock module and data.
+
+    AMP allows for faster training by using lower-precision data types, such as
+    torch.bfloat16, while maintaining model accuracy.
+  """
   device = torch.device("cpu")
   model = MockModule().to(device)
 

@@ -9,12 +9,26 @@ from torchmetrics import MaxMetric, MetricCollection, SumMetric
 
 @dataclass
 class MockStratifierConfig:
+  """
+    Configuration dataclass for mocking a stratifier.
+
+    Args:
+        name (str): The name of the stratifier.
+        index (int): The index of the stratifier.
+        value (int): The value of the stratifier.
+    """
   name: str
   index: int
   value: int
 
 
 class Count(MetricMixin, SumMetric):
+  """
+    Count metric class that inherits from MetricMixin and SumMetric.
+
+    This metric counts occurrences.
+
+    """
   def transform(self, outputs):
     return {"value": 1}
 
@@ -23,6 +37,12 @@ Max = prepend_transform(MaxMetric, lambda outputs: {"value": outputs["value"]})
 
 
 def test_count_metric():
+  """
+    Test function for the Count metric.
+
+    It checks if the Count metric correctly counts the number of examples.
+
+    """
   num_examples = 123
   examples = [
     {"stuff": 0},
@@ -36,6 +56,12 @@ def test_count_metric():
 
 
 def test_collections():
+  """
+    Test function for metric collections.
+
+    It tests if metric collections correctly aggregate metrics.
+
+    """
   max_metric = Max()
   count_metric = Count()
   metric = MetricCollection([max_metric, count_metric])
@@ -51,6 +77,12 @@ def test_collections():
 
 
 def test_task_dependent_ctr():
+  """
+    Test function for task-dependent Ctr (Click-Through Rate) metric.
+
+    It checks if the Ctr metric computes the correct value for different tasks.
+
+    """
   num_examples = 144
   batch_size = 1024
   outputs = [
@@ -69,6 +101,13 @@ def test_task_dependent_ctr():
 
 
 def test_stratified_ctr():
+  """
+    Test function for the Stratified Ctr (Click-Through Rate) metric.
+
+    It checks if the Stratified Ctr metric computes the correct value for different tasks
+    and stratified samples.
+
+    """
   outputs = [
     {
       "stuff": 0,
@@ -114,6 +153,12 @@ def test_stratified_ctr():
 
 
 def test_auc():
+  """
+    Test function for the AUC (Area Under the Curve) metric.
+
+    It checks if the AUC metric correctly computes the Area Under the ROC Curve.
+
+    """
   num_samples = 10000
   metric = core_metrics.Auc(num_samples)
   target = torch.tensor([0, 0, 1, 1, 1])
@@ -131,6 +176,12 @@ def test_auc():
 
 
 def test_pos_rank():
+  """
+    Test function for the PosRanks metric.
+
+    It checks if the PosRanks metric correctly computes the ranks of positive samples.
+
+    """
   metric = core_metrics.PosRanks()
   target = torch.tensor([0, 0, 1, 1, 1])
   preds_correct = torch.tensor([-1.0, -1.0, 0.5, 1.0, 1.5])
@@ -147,6 +198,12 @@ def test_pos_rank():
 
 
 def test_reciprocal_rank():
+  """
+    Test function for the Reciprocal Rank metric.
+
+    It checks if the Reciprocal Rank metric correctly computes the reciprocal of ranks.
+
+    """
   metric = core_metrics.ReciprocalRank()
   target = torch.tensor([0, 0, 1, 1, 1])
   preds_correct = torch.tensor([-1.0, -1.0, 0.5, 1.0, 1.5])
@@ -163,6 +220,12 @@ def test_reciprocal_rank():
 
 
 def test_hit_k():
+  """
+    Test function for the Hit@K metric.
+
+    It checks if the Hit@K metric correctly computes the fraction of positives that rank in the top K among their negatives.
+
+    """
   hit1_metric = core_metrics.HitAtK(1)
   target = torch.tensor([0, 0, 1, 1, 1])
   preds_correct = torch.tensor([-1.0, 1.0, 0.5, -0.1, 1.5])

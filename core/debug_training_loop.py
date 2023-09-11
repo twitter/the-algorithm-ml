@@ -28,6 +28,18 @@ def train(
   *args,
   **kwargs,
 ) -> None:
+  """
+    Debugging training loop. Do not use for actual model training.
+
+    Args:
+        model (torch.nn.Module): The neural network model.
+        optimizer (torch.optim.Optimizer): The optimizer for model optimization.
+        train_steps (int): The number of training steps to perform.
+        dataset (Iterable): Data iterator for training data.
+        scheduler (_LRScheduler, optional): Learning rate scheduler (default: None).
+        *args: Additional arguments (ignored).
+        **kwargs: Additional keyword arguments (ignored).
+    """
 
   logging.warning("Running debug training loop, don't use for model training.")
 

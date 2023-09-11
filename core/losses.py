@@ -10,8 +10,11 @@ import torch
 
 def _maybe_warn(reduction: str):
   """
-  Warning for reduction different than mean.
-  """
+    Emit a warning if the reduction method is different from 'mean'.
+
+    Args:
+        reduction (str): The reduction method being used.
+    """
   if reduction != "mean":
     logging.warn(
       f"For the same global_batch_size, the gradient in DDP is guaranteed to be equal,"
@@ -24,6 +27,16 @@ def build_loss(
   loss_type: LossType,
   reduction="mean",
 ):
+  """
+    Build a loss function based on the specified loss type and reduction method.
+
+    Args:
+        loss_type (LossType): The type of loss to build.
+        reduction (str): The reduction method for the loss (default: 'mean').
+
+    Returns:
+        Callable: A loss function that takes logits and labels as input.
+    """
   _maybe_warn(reduction)
   f = _LOSS_TYPE_TO_FUNCTION[loss_type]
 
@@ -35,11 +48,15 @@ def build_loss(
 
 def get_global_loss_detached(local_loss, reduction="mean"):
   """
-  Perform all_reduce to obtain the global loss function using the provided reduction.
-  :param local_loss: The local loss of the current rank.
-  :param reduction: The reduction to use for all_reduce. Should match the reduction used by DDP.
-  :return: The reduced & detached global loss.
-  """
+    Perform all_reduce to obtain the global loss function using the provided reduction.
+
+    Args:
+        local_loss (torch.Tensor): The local loss of the current rank.
+        reduction (str): The reduction to use for all_reduce. Should match the reduction used by DDP.
+
+    Returns:
+        torch.Tensor: The reduced and detached global loss.
+    """
   if reduction != "mean":
     logging.warn(
       f"The reduction used in this function should be the same as the one used by "
@@ -66,6 +83,19 @@ def build_multi_task_loss(
   global_reduction="mean",
   pos_weights=None,
 ):
+  """
+    Build a multi-task loss function based on the specified loss type and configurations.
+
+    Args:
+        loss_type (LossType): The type of loss to build.
+        tasks (typing.List[str]): List of task names.
+        task_loss_reduction (str): Reduction method for task-specific losses (default: 'mean').
+        global_reduction (str): Reduction method for the global loss (default: 'mean').
+        pos_weights (Optional): Positive class weights for tasks (default: None).
+
+    Returns:
+        Callable: A multi-task loss function that takes logits, labels, and weights as input.
+    """ 
   _maybe_warn(global_reduction)
   _maybe_warn(task_loss_reduction)
   f = _LOSS_TYPE_TO_FUNCTION[loss_type]
