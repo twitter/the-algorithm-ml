@@ -14,18 +14,21 @@ def update_mean(
   weight: torch.Tensor,
 ) -> Tuple[torch.Tensor, torch.Tensor]:
   """
-  Update the mean according to Welford formula:
-  https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Weighted_batched_version.
+  Update the mean according to the Welford formula.
+
+    This function updates the mean and the weighted sum of values using the Welford algorithm.
+    https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Weighted_batched_version.
   See also https://nullbuffer.com/articles/welford_algorithm.html for more information.
-  Args:
-    current_mean: The value of the current accumulated mean.
-    current_weight_sum: The current weighted sum.
-    value: The new value that needs to be added to get a new mean.
-    weight: The weights for the new value.
 
-  Returns: The updated mean and updated weighted sum.
+    Args:
+        current_mean (torch.Tensor): The value of the current accumulated mean.
+        current_weight_sum (torch.Tensor): The current weighted sum.
+        value (torch.Tensor): The new value that needs to be added to get a new mean.
+        weight (torch.Tensor): The weights for the new value.
 
-  """
+    Returns:
+        Tuple[torch.Tensor, torch.Tensor]: The updated mean and updated weighted sum.
+    """
   weight = torch.broadcast_to(weight, value.shape)
 
   # Avoiding (on purpose) in-place operation when using += in case
@@ -38,12 +41,15 @@ def update_mean(
 def stable_mean_dist_reduce_fn(state: torch.Tensor) -> torch.Tensor:
   """
   Merge the state from multiple workers.
-  Args:
-    state: A tensor with the first dimension indicating workers.
 
-  Returns: The accumulated mean from all workers.
+    This function merges the state from multiple workers to compute the accumulated mean.
 
-  """
+    Args:
+        state (torch.Tensor): A tensor with the first dimension indicating workers.
+
+    Returns:
+        torch.Tensor: The accumulated mean from all workers.
+    """
   mean, weight_sum = update_mean(
     current_mean=torch.as_tensor(0.0, dtype=state.dtype, device=state.device),
     current_weight_sum=torch.as_tensor(0.0, dtype=state.dtype, device=state.device),
@@ -55,12 +61,20 @@ def stable_mean_dist_reduce_fn(state: torch.Tensor) -> torch.Tensor:
 
 class StableMean(torchmetrics.Metric):
   """
-  This implements a numerical stable mean metrics computation using Welford algorithm according to
-  https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Weighted_batched_version.
+  A numerical stable mean metric using the Welford algorithm.
+
+    This class implements a numerical stable mean metrics computation using the Welford algorithm.
+    https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Weighted_batched_version.
   For example when using float32, the algorithm will give a valid output even if the "sum" is larger
    than the maximum float32 as far as the mean is within the limit of float32.
   See also https://nullbuffer.com/articles/welford_algorithm.html for more information.
-  """
+
+    Args:
+        **kwargs: Additional parameters supported by all torchmetrics.Metric.
+
+    Attributes:
+        mean_and_weight_sum (torch.Tensor): A tensor to store the mean and weighted sum.
+    """
 
   def __init__(self, **kwargs):
     """
@@ -75,12 +89,12 @@ class StableMean(torchmetrics.Metric):
     )
 
   def update(self, value: torch.Tensor, weight: Union[float, torch.Tensor] = 1.0) -> None:
-    """
-    Update the current mean.
-    Args:
-      value: Value to update the mean with.
-      weight: weight to use. Shape should be broadcastable to that of value.
-    """
+    """Update the current mean.
+
+        Args:
+            value (torch.Tensor): Value to update the mean with.
+            weight (Union[float, torch.Tensor]): Weight to use. Shape should be broadcastable to that of value.
+        """
     mean, weight_sum = self.mean_and_weight_sum[0], self.mean_and_weight_sum[1]
 
     if not isinstance(weight, torch.Tensor):
@@ -91,7 +105,9 @@ class StableMean(torchmetrics.Metric):
     )
 
   def compute(self) -> torch.Tensor:
-    """
-    Compute and return the accumulated mean.
-    """
+    """Compute and return the accumulated mean.
+
+        Returns:
+            torch.Tensor: The accumulated mean.
+        """
     return self.mean_and_weight_sum[0]
