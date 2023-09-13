@@ -15,6 +15,15 @@ from torchrec.sparse.jagged_tensor import KeyedJaggedTensor
 
 @dataclass
 class EdgeBatch(DataclassBatch):
+  """
+    Batch data structure for edge-based models.
+
+    Args:
+        nodes (KeyedJaggedTensor): A KeyedJaggedTensor containing node embeddings.
+        labels (torch.Tensor): Tensor containing labels.
+        rels (torch.Tensor): Tensor containing relation information.
+        weights (torch.Tensor): Tensor containing weights.
+    """
   nodes: KeyedJaggedTensor
   labels: torch.Tensor
   rels: torch.Tensor
@@ -22,6 +31,18 @@ class EdgeBatch(DataclassBatch):
 
 
 class EdgesDataset(Dataset):
+  """
+    Dataset for edge-based models.
+
+    Args:
+        file_pattern (str): The file pattern for the dataset.
+        table_sizes (Dict[str, int]): A dictionary of table names and their sizes.
+        relations (List[Relation]): A list of relations between tables.
+        lhs_column_name (str): The name of the left-hand-side column.
+        rhs_column_name (str): The name of the right-hand-side column.
+        rel_column_name (str): The name of the relation column.
+        **dataset_kwargs: Additional keyword arguments for the parent Dataset class.
+    """
   rng = np.random.default_rng()
 
   def __init__(
@@ -56,6 +77,15 @@ class EdgesDataset(Dataset):
     super().__init__(file_pattern=file_pattern, **dataset_kwargs)
 
   def pa_to_batch(self, batch: pa.RecordBatch):
+    """
+        Converts a pyarrow RecordBatch to an EdgeBatch.
+
+        Args:
+            batch (pa.RecordBatch): A pyarrow RecordBatch containing data.
+
+        Returns:
+            EdgeBatch: An EdgeBatch containing node embeddings, labels, relations, and weights.
+        """
     lhs = torch.from_numpy(batch.column(self.lhs_column_name).to_numpy())
     rhs = torch.from_numpy(batch.column(self.rhs_column_name).to_numpy())
     rel = torch.from_numpy(batch.column(self.rel_column_name).to_numpy())
@@ -74,6 +104,14 @@ class EdgesDataset(Dataset):
   ) -> Tuple[KeyedJaggedTensor, List[Tuple[int, int]]]:
 
     """Process edges that contain lhs index, rhs index, relation index.
+
+    Args:
+      lhs (torch.Tensor): Tensor containing left-hand-side indices.
+      rhs (torch.Tensor): Tensor containing right-hand-side indices.
+      rel (torch.Tensor): Tensor containing relation indices.
+
+    Returns:
+      Tuple[KeyedJaggedTensor, List[Tuple[int, int]]]: A KeyedJaggedTensor and relation index pairs.
     Example:
 
     ```
@@ -147,6 +185,12 @@ class EdgesDataset(Dataset):
     return KeyedJaggedTensor(keys=self.table_names, values=values, lengths=lengths)
 
   def to_batches(self):
+    """
+        Converts data to batches.
+
+        Yields:
+            pa.RecordBatch: A pyarrow RecordBatch containing data.
+        """
     ds = super().to_batches()
     batch_size = self._dataset_kwargs["batch_size"]
 

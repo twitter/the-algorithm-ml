@@ -12,6 +12,17 @@ import torch
 
 
 def create_dataset(tmpdir):
+  """
+    Create a mock dataset for testing.
+
+    This function creates a mock dataset using PyArrow and Parquet for testing purposes.
+
+    Args:
+        tmpdir: A temporary directory where the dataset will be created.
+
+    Returns:
+        MockDataset: A mock dataset for testing.
+    """
 
   table = pa.table(
     {
@@ -34,6 +45,14 @@ def create_dataset(tmpdir):
 
 
 def test_dataset(tmpdir):
+  """
+    Test the created dataset.
+
+    This function tests the created mock dataset and checks if it behaves as expected.
+
+    Args:
+        tmpdir: A temporary directory used for testing.
+    """
   ds = create_dataset(tmpdir)
   batch = next(iter(ds.dataloader(remote=False)))
   assert batch.batch_size == 2
@@ -46,6 +65,14 @@ def test_dataset(tmpdir):
   reason="Multiprocessing doesn't work on github yet.",
 )
 def test_distributed_dataset(tmpdir):
+  """
+    Test the distributed dataset.
+
+    This function tests the distributed version of the mock dataset using multiprocessing.
+
+    Args:
+        tmpdir: A temporary directory used for testing.
+    """
   MOCK_ENV = {"TEMP_SLURM_NUM_READERS": "1"}
 
   def _client():

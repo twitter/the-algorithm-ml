@@ -15,6 +15,14 @@ TRANSLATION_OPT_KEY = "operator_opt"
 
 
 def _lr_from_config(optimizer_config):
+  """Get the learning rate from an optimizer configuration.
+
+    Args:
+        optimizer_config: Optimizer configuration.
+
+    Returns:
+        Learning rate from the optimizer configuration.
+    """
   if optimizer_config.learning_rate is not None:
     return optimizer_config.learning_rate
   else:
@@ -26,13 +34,13 @@ def _lr_from_config(optimizer_config):
 def build_optimizer(model: TwhinModel, config: TwhinModelConfig):
   """Builds an optimizer for a Twhin model combining the embeddings optimizer with an optimizer for per-relation translations.
 
-  Args:
-    model: TwhinModel to build optimizer for.
-    config: TwhinConfig for model.
+    Args:
+        model: TwhinModel to build optimizer for.
+        config: TwhinModelConfig for model.
 
-  Returns:
-    Optimizer for model.
-  """
+    Returns:
+        Optimizer for model.
+    """
   translation_optimizer_fn = functools.partial(
     get_optimizer_class(config.translation_optimizer),
     **get_optimizer_algorithm_config(config.translation_optimizer).dict(),
