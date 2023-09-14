@@ -105,6 +105,23 @@ def test_twhin_model():
 
 
 def test_unequal_dims():
+  """
+    Test function for validating unequal embedding dimensions in TwhinEmbeddingsConfig.
+
+    This function tests whether the validation logic correctly raises a `ValidationError` when
+    embedding dimensions in the `TwhinEmbeddingsConfig` are not equal for all tables.
+
+    The test includes the following steps:
+    1. Create two embedding configurations with different embedding dimensions.
+    2. Attempt to create a `TwhinEmbeddingsConfig` instance with the unequal embedding dimensions.
+    3. Assert that a `ValidationError` is raised, indicating that embedding dimensions must match.
+
+    This function serves as a test case to ensure that the validation logic enforces equal embedding dimensions
+    in the `TwhinEmbeddingsConfig` for all tables.
+
+    Raises:
+        AssertionError: If the expected `ValidationError` is not raised.
+    """
   sgd_config_1 = OptimizerConfig(sgd=SgdConfig(lr=0.02))
   sgd_config_2 = OptimizerConfig(sgd=SgdConfig(lr=0.05))
   table0 = EmbeddingBagConfig(

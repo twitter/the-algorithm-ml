@@ -23,12 +23,30 @@ _DENSE_EMBEDDINGS = "dense_ebc"
 
 
 class RecapLRShim(torch.optim.lr_scheduler._LRScheduler):
-  """Shim to get learning rates into a LRScheduler.
-
-  This adheres to the torch.optim scheduler API and can be plugged anywhere that
-  e.g. exponential decay can be used.
-
   """
+    A shim to get learning rates into a LRScheduler.
+
+    This class adheres to the torch.optim scheduler API and can be plugged into any scheduler that supports
+    learning rate schedules, such as exponential decay.
+
+    Args:
+        optimizer: The optimizer to which this scheduler is applied.
+        lr_dict (Dict[str, config.LearningRate]): A dictionary mapping group names to learning rate configurations.
+        emb_learning_rate: The learning rate for embeddings (optional).
+        last_epoch (int): The index of the last epoch (default: -1).
+        verbose (bool): If True, print warnings for deprecated functions (default: False).
+
+    Example:
+        To create a RecapLRShim scheduler for an optimizer and a dictionary of learning rates, use:
+
+        ```python
+        scheduler = RecapLRShim(optimizer, lr_dict, emb_learning_rate)
+        ```
+
+    Warning:
+        This class is intended for internal use to handle learning rate scheduling within Recap training and should not
+        be directly accessed by external code.
+    """
 
   def __init__(
     self,
@@ -80,15 +98,25 @@ def build_optimizer(
   optimizer_config: config.OptimizerConfig,
   emb_optimizer_config: None = None,  # Optional[EmbeddingOptimizerConfig] = None,
 ):
-  """Builds an optimizer and scheduler.
-
-  Args:
-    model: A torch model, probably with DDP/DMP.
-    optimizer_config: An OptimizerConfig object that specifies learning rates per tower.
-
-  Returns:
-    A torch.optim instance, and a scheduler instance.
   """
+    Build an optimizer and scheduler for training.
+
+    Args:
+        model: The torch model, possibly with DDP/DMP.
+        optimizer_config (config.OptimizerConfig): Configuration settings for the optimizer.
+        emb_optimizer_config: Configuration settings for embedding optimization (optional).
+
+    Returns:
+        torch.optim.Optimizer: The optimizer for training.
+        RecapLRShim: The learning rate scheduler for the optimizer.
+
+    Example:
+        To build an optimizer and scheduler for training, use:
+
+        ```python
+        optimizer, scheduler = build_optimizer(model, optimizer_config, emb_optimizer_config)
+        ```
+    """
   optimizer_fn = functools.partial(
     torch.optim.Adam,
     lr=_DEFAULT_LR,

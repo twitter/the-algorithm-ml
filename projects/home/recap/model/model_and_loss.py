@@ -5,6 +5,53 @@ from absl import logging
 
 
 class ModelAndLoss(torch.nn.Module):
+  """
+    PyTorch module that combines a neural network model and loss function.
+
+    This module wraps a neural network model and facilitates the forward pass through the model
+    while also calculating the loss based on the model's predictions and provided labels.
+
+    Args:
+        model: The torch module to wrap.
+        loss_fn (Callable): Function for calculating the loss, which should accept logits and labels.
+        stratifiers (Optional[List[embedding_config_mod.StratifierConfig]]): A list of stratifier configurations
+            for metrics stratification. Each stratifier config includes the name and index of discrete features
+            to emit for stratification.
+
+    Example:
+        To use `ModelAndLoss` in a PyTorch training loop, you can create an instance of it and pass your model
+        and loss function as arguments:
+
+        ```python
+        # Create a neural network model
+        model = YourNeuralNetworkModel()
+
+        # Define a loss function
+        loss_fn = torch.nn.CrossEntropyLoss()
+
+        # Create an instance of ModelAndLoss
+        model_and_loss = ModelAndLoss(model, loss_fn)
+
+        # Generate a batch of training data (e.g., RecapBatch)
+        batch = generate_training_batch()
+
+        # Perform a forward pass through the model and calculate the loss
+        loss, outputs = model_and_loss(batch)
+
+        # You can now backpropagate and optimize using the computed loss
+        loss.backward()
+        optimizer.step()
+        ```
+
+    Note:
+        The `ModelAndLoss` class simplifies the process of running forward passes through a model and
+        calculating loss, making it easier to integrate the model into your training loop. Additionally,
+        it supports the addition of stratifiers for metrics stratification, if needed.
+
+    Warning:
+        This class is intended for internal use within neural network architectures and should not be
+        directly accessed or modified by external code.
+    """
   def __init__(
     self,
     model,
@@ -12,10 +59,13 @@ class ModelAndLoss(torch.nn.Module):
     stratifiers: Optional[List[embedding_config_mod.StratifierConfig]] = None,
   ) -> None:
     """
-    Args:
-      model: torch module to wrap.
-      loss_fn: Function for calculating loss, should accept logits and labels.
-      straitifiers: mapping of stratifier name and index of discrete features to emit for metrics stratification.
+        Initializes the ModelAndLoss module.
+
+        Args:
+            model: The torch module to wrap.
+            loss_fn (Callable): Function for calculating the loss, which should accept logits and labels.
+            stratifiers (Optional[List[embedding_config_mod.StratifierConfig]]): A list of stratifier configurations
+                for metrics stratification.
     """
     super().__init__()
     self.model = model

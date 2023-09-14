@@ -34,6 +34,33 @@ FLAGS = flags.FLAGS
 
 
 def run(unused_argv: str, data_service_dispatcher: Optional[str] = None):
+  """
+    Main function to run the training of a ranking model.
+
+    This function initializes and runs the training process for a ranking model based on the provided configuration.
+    
+    Args:
+        unused_argv (str): Unused argument.
+        data_service_dispatcher (Optional[str]): The data service dispatcher for accessing training data (optional).
+
+    Returns:
+        None
+
+    Raises:
+        AssertionError: If the configuration or input data is not valid.
+
+    Note:
+        This function serves as the main entry point for training a ranking model. It loads the configuration, sets up
+        the training environment, defines the loss function, creates the model, optimizer, and scheduler, and runs the
+        training loop.
+
+    Example:
+        To run the training process, use the following command:
+        
+        ```
+        python run_training.py --config_path=config.yaml
+        ```
+    """
   print("#" * 100)
 
   config = tml_config_mod.load_config_from_yaml(recap_config_mod.RecapConfig, FLAGS.config_path)
