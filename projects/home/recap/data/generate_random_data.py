@@ -17,6 +17,16 @@ FLAGS = flags.FLAGS
 def _generate_random_example(
   tf_example_schema: Dict[str, tf.io.FixedLenFeature]
 ) -> Dict[str, tf.Tensor]:
+  """
+    Generate a random example based on the provided TensorFlow example schema.
+
+    Args:
+        tf_example_schema (Dict[str, tf.io.FixedLenFeature]): A dictionary defining the schema of the TensorFlow example.
+
+    Returns:
+        Dict[str, tf.Tensor]: A dictionary containing random data for each feature defined in the schema.
+    """
+
   example = {}
   for feature_name, feature_spec in tf_example_schema.items():
     dtype = feature_spec.dtype
@@ -33,14 +43,43 @@ def _generate_random_example(
 
 
 def _float_feature(value):
+  """
+    Create a TensorFlow float feature.
+
+    Args:
+        value: A float or list of floats.
+
+    Returns:
+        tf.train.Feature: A TensorFlow feature containing the float value(s).
+    """
+
   return tf.train.Feature(float_list=tf.train.FloatList(value=value))
 
 
 def _int64_feature(value):
+  """
+    Create a TensorFlow int64 feature.
+
+    Args:
+        value: An integer or list of integers.
+
+    Returns:
+        tf.train.Feature: A TensorFlow feature containing the int64 value(s).
+    """
+
   return tf.train.Feature(int64_list=tf.train.Int64List(value=value))
 
 
 def _serialize_example(x: Dict[str, tf.Tensor]) -> bytes:
+  """
+    Serialize a dictionary of TensorFlow tensors into a binary string.
+
+    Args:
+        x (Dict[str, tf.Tensor]): A dictionary of TensorFlow tensors.
+
+    Returns:
+        bytes: The serialized binary string.
+    """
   feature = {}
   serializers = {tf.float32: _float_feature, tf.int64: _int64_feature}
   for feature_name, tensor in x.items():
@@ -51,6 +90,15 @@ def _serialize_example(x: Dict[str, tf.Tensor]) -> bytes:
 
 
 def generate_data(data_path: str, config: recap_config_mod.RecapConfig):
+  """
+    Generate random data based on the provided configuration and save it as a TFRecord file.
+
+    Args:
+        data_path (str): The path where the TFRecord file will be saved.
+        config (recap_config_mod.RecapConfig): The configuration for generating the random data.
+    """
+
+
   with tf.io.gfile.GFile(config.train_data.seg_dense_schema.schema_path, "r") as f:
     seg_dense_schema = json.load(f)["schema"]
 
@@ -68,6 +116,12 @@ def generate_data(data_path: str, config: recap_config_mod.RecapConfig):
 
 
 def _generate_data_main(unused_argv):
+  """
+    Main function to generate random data according to the provided configuration.
+
+    Args:
+        unused_argv: Unused command-line arguments.
+    """
   config = tml_config_mod.load_config_from_yaml(recap_config_mod.RecapConfig, FLAGS.config_path)
 
   # Find the path where to put the data
