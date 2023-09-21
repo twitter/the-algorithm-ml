@@ -21,6 +21,16 @@ import torch.distributed as dist
 
 
 def maybe_start_dataset_service():
+  """
+    Start the dataset service if readers are available and required dependencies are met.
+
+    This function checks if readers are available and if the required TensorFlow version is >= 2.5.
+    If both conditions are met and the current environment is the dispatcher or reader, it starts
+    the TensorFlow dataset service.
+
+    Raises:
+        Exception: If the required TensorFlow version is not met (>= 2.5).
+    """
   if not env.has_readers():
     return
 
@@ -59,6 +69,24 @@ def maybe_start_dataset_service():
 def register_dataset(
   dataset: tf.data.Dataset, dataset_service: str, compression: Optional[str] = "AUTO"
 ):
+  """
+    Register a dataset with the distributed dataset service.
+
+    This function registers a dataset with the distributed dataset service and broadcasts the dataset ID
+    and job name to all processes in the distributed environment.
+
+    Args:
+        dataset (tf.data.Dataset): The dataset to be registered.
+        dataset_service (str): The name of the dataset service.
+        compression (Optional[str]): The compression type for the dataset (default is "AUTO").
+
+    Returns:
+        Tuple[int, str]: A tuple containing the dataset ID and job name.
+
+    Note:
+        This function should be called on the rank 0 process.
+
+    """
   if dist.get_rank() == 0:
     dataset_id = _register_dataset(
       service=dataset_service,
@@ -82,6 +110,23 @@ def distribute_from_dataset_id(
   compression: Optional[str] = "AUTO",
   prefetch: Optional[int] = tf.data.experimental.AUTOTUNE,
 ) -> tf.data.Dataset:
+  """
+    Distribute a dataset from a registered dataset ID.
+
+    This function consumes a dataset from the distributed dataset service using the provided dataset ID
+    and job name. It also supports prefetching for improved performance.
+
+    Args:
+        dataset_service (str): The name of the dataset service.
+        dataset_id (int): The ID of the dataset to be consumed.
+        job_name (Optional[str]): The name of the job associated with the dataset (optional).
+        compression (Optional[str]): The compression type for the dataset (default is "AUTO").
+        prefetch (Optional[int]): The number of elements to prefetch (default is tf.data.experimental.AUTOTUNE).
+
+    Returns:
+        tf.data.Dataset: The distributed dataset.
+
+    """
   logging.info(f"rank{dist.get_rank()}: Consuming dds job with {dataset_id}, {job_name}")
   dataset = _from_dataset_id(
     processing_mode="parallel_epochs",
@@ -97,15 +142,28 @@ def distribute_from_dataset_id(
 
 
 def maybe_distribute_dataset(dataset: tf.data.Dataset) -> tf.data.Dataset:
-  """Torch-compatible and distributed-training-aware dataset service distributor.
-
-  - rank 0 process will register the given dataset.
-  - rank 0 process will broadcast job name and dataset id.
-  - all rank processes will consume from the same job/dataset.
-
-  Without this, dataset workers will try to serve 1 job per rank process and OOM.
-
   """
+    Distribute a TensorFlow dataset for Torch-compatible and distributed training-aware consumption.
+
+    This function is used to distribute a dataset in a distributed training environment. It performs the
+    following steps:
+    - On the rank 0 process, it registers the given dataset with the distributed dataset service.
+    - It broadcasts the job name and dataset ID to all rank processes.
+    - All rank processes then consume the same dataset from the distributed dataset service.
+
+    Args:
+        dataset (tf.data.Dataset): The TensorFlow dataset to be distributed.
+
+    Returns:
+        tf.data.Dataset: The distributed TensorFlow dataset.
+
+    Note:
+        - If there are no reader processes in the distributed environment, the original dataset is returned
+          without any distribution.
+        - This function is intended for use in distributed training environments to prevent out-of-memory (OOM)
+          issues caused by each rank process trying to serve one job.
+
+    """
   if not env.has_readers():
     return dataset
   dataset_service = env.get_dds()

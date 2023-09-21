@@ -14,6 +14,28 @@ from torchrec.optim.apply_optimizer_in_backward import apply_optimizer_in_backwa
 
 
 class TwhinModel(nn.Module):
+  """
+    Twhin model for graph-based entity embeddings and translation.
+
+    This class defines the Twhin model, which is used for learning embeddings of entities in a graph
+    and applying translations to these embeddings based on graph relationships.
+
+    Args:
+        model_config (TwhinModelConfig): Configuration for the Twhin model.
+        data_config (TwhinDataConfig): Configuration for the data used by the model.
+
+    Attributes:
+        batch_size (int): The batch size used for training.
+        table_names (List[str]): Names of tables in the model's embeddings.
+        large_embeddings (LargeEmbeddings): LargeEmbeddings instance for entity embeddings.
+        embedding_dim (int): Dimensionality of entity embeddings.
+        num_tables (int): Number of tables in the model's embeddings.
+        in_batch_negatives (int): Number of in-batch negative samples to use during training.
+        global_negatives (int): Number of global negative samples to use during training.
+        num_relations (int): Number of graph relationships in the model.
+        all_trans_embs (torch.nn.Parameter): Parameter tensor for translation embeddings.
+
+    """
   def __init__(self, model_config: TwhinModelConfig, data_config: TwhinDataConfig):
     super().__init__()
     self.batch_size = data_config.per_replica_batch_size
@@ -31,7 +53,17 @@ class TwhinModel(nn.Module):
     )
 
   def forward(self, batch: EdgeBatch):
+    """
+        Forward pass of the Twhin model.
 
+        Args:
+            batch (EdgeBatch): Input batch containing graph edge information.
+
+        Returns:
+            dict: A dictionary containing model output with "logits" and "probabilities".
+                - "logits" (torch.Tensor): Logit scores.
+                - "probabilities" (torch.Tensor): Sigmoid probabilities.
+        """
     # B x D
     trans_embs = self.all_trans_embs.data[batch.rels]
 
@@ -98,6 +130,18 @@ class TwhinModel(nn.Module):
 
 
 def apply_optimizers(model: TwhinModel, model_config: TwhinModelConfig):
+  """
+    Apply optimizers to the Twhin model's embeddings.
+
+    This function applies optimizers to the embeddings of the Twhin model based on the provided configuration.
+
+    Args:
+        model (TwhinModel): The Twhin model to apply optimizers to.
+        model_config (TwhinModelConfig): Configuration for the Twhin model.
+
+    Returns:
+        TwhinModel: The Twhin model with optimizers applied to its embeddings.
+    """
   for table in model_config.embeddings.tables:
     optimizer_class = get_optimizer_class(table.optimizer)
     optimizer_kwargs = get_optimizer_algorithm_config(table.optimizer).dict()
@@ -124,10 +168,14 @@ class TwhinModelAndLoss(torch.nn.Module):
     device: torch.device,
   ) -> None:
     """
-    Args:
-      model: torch module to wrap.
-      loss_fn: Function for calculating loss, should accept logits and labels.
-    """
+        Initialize a TwhinModelAndLoss module.
+
+        Args:
+            model: The torch module to wrap.
+            loss_fn: A function for calculating loss, should accept logits and labels.
+            data_config: Configuration for Twhin data.
+            device: The torch device to use for calculations.
+        """
     super().__init__()
     self.model = model
     self.loss_fn = loss_fn
@@ -136,14 +184,21 @@ class TwhinModelAndLoss(torch.nn.Module):
     self.device = device
 
   def forward(self, batch: "RecapBatch"):  # type: ignore[name-defined]
-    """Runs model forward and calculates loss according to given loss_fn.
-
-    NOTE: The input signature here needs to be a Pipelineable object for
-    prefetching purposes during training using torchrec's pipeline.  However
-    the underlying model signature needs to be exportable to onnx, requiring
-    generic python types.  see https://pytorch.org/docs/stable/onnx.html#types.
-
     """
+        Run the model forward and calculate the loss according to the given loss_fn.
+
+        NOTE: The input signature here needs to be a Pipelineable object for
+        prefetching purposes during training using torchrec's pipeline.  However
+        the underlying model signature needs to be exportable to onnx, requiring
+        generic python types.  see https://pytorch.org/docs/stable/onnx.html#types
+
+        Args:
+            batch ("RecapBatch"): The input batch for model inference.
+
+        Returns:
+            Tuple[torch.Tensor, Dict[str, torch.Tensor]]: A tuple containing the loss tensor and a dictionary of
+            additional outputs including logits, labels, and weights.
+        """
     outputs = self.model(batch)
     logits = outputs["logits"]
 

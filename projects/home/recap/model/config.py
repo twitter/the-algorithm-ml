@@ -40,6 +40,7 @@ class BatchNormConfig(base_config.BaseConfig):
 
 
 class DenseLayerConfig(base_config.BaseConfig):
+  """Configuration for the dense layer."""
   layer_size: pydantic.PositiveInt
   dropout: DropoutConfig = pydantic.Field(None, description="Optional dropout config for layer.")
 
@@ -61,6 +62,7 @@ class BatchNormConfig(base_config.BaseConfig):
 
 
 class DoubleNormLogConfig(base_config.BaseConfig):
+  """Configuration for the double norm log transform."""
   batch_norm_config: Optional[BatchNormConfig] = pydantic.Field(None)
   clip_magnitude: float = pydantic.Field(
     5.0, description="Threshold to clip the normalized input values."
@@ -73,12 +75,14 @@ class Log1pAbsConfig(base_config.BaseConfig):
 
 
 class ClipLog1pAbsConfig(base_config.BaseConfig):
+  """Configuration for the clip log transform."""
   clip_magnitude: pydantic.NonNegativeFloat = pydantic.Field(
     3e38, description="Threshold to clip the input values."
   )
 
 
 class ZScoreLogConfig(base_config.BaseConfig):
+  """Configuration for the z-score log transform."""
   analysis_path: str
   schema_path: str = pydantic.Field(
     None,
@@ -148,6 +152,7 @@ class DcnConfig(base_config.BaseConfig):
 
 
 class MaskBlockConfig(base_config.BaseConfig):
+  """Config for MaskNet block."""
   output_size: int
   reduction_factor: Optional[pydantic.PositiveFloat] = pydantic.Field(
     None, one_of="aggregation_size"
@@ -159,6 +164,7 @@ class MaskBlockConfig(base_config.BaseConfig):
 
 
 class MaskNetConfig(base_config.BaseConfig):
+  """Config for MaskNet model."""
   mask_blocks: List[MaskBlockConfig]
   mlp: Optional[MlpConfig] = pydantic.Field(None, description="MLP Configuration for parallel")
   use_parallel: bool = pydantic.Field(False, description="Whether to use parallel MaskNet.")
@@ -190,6 +196,7 @@ class AffineMap(base_config.BaseConfig):
 
 
 class DLRMConfig(base_config.BaseConfig):
+  """Config for DLRM model."""
   bottom_mlp: MlpConfig = pydantic.Field(
     ...,
     description="Bottom mlp, the output to be combined with sparse features and feed to interaction",
@@ -198,6 +205,7 @@ class DLRMConfig(base_config.BaseConfig):
 
 
 class TaskModel(base_config.BaseConfig):
+  """Configuration for a single task."""
   mlp_config: MlpConfig = pydantic.Field(None, one_of="architecture")
   dcn_config: DcnConfig = pydantic.Field(None, one_of="architecture")
   dlrm_config: DLRMConfig = pydantic.Field(None, one_of="architecture")
@@ -213,6 +221,7 @@ class TaskModel(base_config.BaseConfig):
 
 
 class MultiTaskType(str, enum.Enum):
+  """Type of multi task architecture."""
   SHARE_NONE = "share_none"  # Tasks are separate.
   SHARE_ALL = "share_all"  # Tasks share same backbone.
   SHARE_PARTIAL = "share_partial"  # Tasks share some backbone, but have their own portions.
@@ -247,6 +256,7 @@ class ModelConfig(base_config.BaseConfig):
 
   @pydantic.root_validator()
   def _validate_mtl(cls, values):
+    """Validate the multi task architecture."""
     if values.get("multi_task_type", None) is None:
       return values
     elif values["multi_task_type"] in [MultiTaskType.SHARE_ALL, MultiTaskType.SHARE_PARTIAL]:

@@ -13,23 +13,30 @@ GCS_PREFIX = "gs://"
 
 
 class Snapshot:
-  """Checkpoints using torchsnapshot.
-
-  Also saves step to be updated by the training loop.
-
   """
+    Checkpoints using torchsnapshot. Also saves step to be updated by the training loop.
+    """
 
   def __init__(self, save_dir: str, state: Dict[str, Any]) -> None:
+    """
+        Initializes a Snapshot object.
+
+        Args:
+            save_dir (str): Directory where checkpoints will be saved.
+            state (Dict[str, Any]): State dictionary containing checkpoint information.
+        """
     self.save_dir = save_dir
     self.state = state
     self.state["extra_state"] = torchsnapshot.StateDict(step=0, walltime=0.0)
 
   @property
   def step(self):
+    """Get the current training step."""
     return self.state["extra_state"]["step"]
 
   @step.setter
   def step(self, step: int) -> None:
+    """Set the current training step."""
     self.state["extra_state"]["step"] = step
 
   @property
@@ -41,7 +48,15 @@ class Snapshot:
     self.state["extra_state"]["walltime"] = walltime
 
   def save(self, global_step: int) -> "PendingSnapshot":
-    """Saves checkpoint with given global_step."""
+    """
+        Saves a checkpoint with a given global step.
+
+        Args:
+            global_step (int): The global step to associate with the checkpoint.
+
+        Returns:
+            PendingSnapshot: A pending snapshot object.
+        """
     path = os.path.join(self.save_dir, str(global_step))
     logging.info(f"Saving snapshot global_step {global_step} to {path}.")
     start_time = time.time()
@@ -58,7 +73,12 @@ class Snapshot:
     return snapshot
 
   def restore(self, checkpoint: str) -> None:
-    """Restores a given checkpoint."""
+    """
+        Restores a given checkpoint.
+
+        Args:
+            checkpoint (str): Path to the checkpoint to restore.
+        """
     snapshot = torchsnapshot.Snapshot(path=checkpoint)
     logging.info(f"Restoring snapshot from {snapshot.path}.")
     start_time = time.time()
@@ -83,12 +103,17 @@ class Snapshot:
     global_step: Optional[int] = None,
     missing_ok: bool = False,
   ) -> torchsnapshot.Snapshot:
-    """Get torch stateless snapshot, without actually loading it.
-    Args:
-      snapshot_path: path to the model snapshot
-      global_step: restores from this checkpoint if specified.
-      missing_ok: if True and checkpoints do not exist, returns without restoration.
     """
+        Get a torch stateless snapshot, without actually loading it.
+
+        Args:
+            snapshot_path (str): Path to the model snapshot.
+            global_step (int, optional): Restores from this checkpoint if specified.
+            missing_ok (bool): If True and checkpoints do not exist, returns without restoration.
+
+        Returns:
+            torchsnapshot.Snapshot: A torch snapshot object.
+        """
     path = get_checkpoint(snapshot_path, global_step, missing_ok)
     logging.info(f"Loading snapshot from {path}.")
     return torchsnapshot.Snapshot(path=path)
@@ -100,13 +125,14 @@ class Snapshot:
     snapshot_emb_name: str,
     weight_tensor,
   ) -> None:
-    """Loads pretrained embedding from the snapshot to the model.
-       Utilise partial lodaing meachanism from torchsnapshot.
-    Args:
-      embedding_snapshot: Path to the snapshot containing pretrained embeddings (EBC).
-      snapshot_emb_name: Name of the layer in the *snapshot* model, containing the EBC.
-      weight_tensor: embeddings tensor of *current* model, where the embeddings will be loaded.
     """
+        Loads pretrained embedding from the snapshot to the model.
+
+        Args:
+            embedding_snapshot (torchsnapshot.Snapshot): Path to the snapshot containing pretrained embeddings (EBC).
+            snapshot_emb_name (str): Name of the layer in the snapshot model containing the EBC.
+            weight_tensor: Embeddings tensor of the current model where the embeddings will be loaded.
+        """
     start_time = time.time()
     manifest = embedding_snapshot.get_manifest()
     for path in manifest.keys():
@@ -209,7 +235,22 @@ def get_checkpoint(
 
 
 def get_checkpoints(save_dir: str) -> List[str]:
-  """Gets all checkpoints that have been fully written."""
+  """
+    Get a list of fully written checkpoints in the specified directory.
+
+    This function retrieves a list of fully written checkpoints in the given directory.
+    Checkpoints that are considered fully written include those that have a
+    corresponding snapshot metadata file.
+
+    Args:
+        save_dir (str): The directory where checkpoints are stored.
+
+    Returns:
+        List[str]: A list of fully written checkpoint paths.
+
+    Note:
+        Checkpoints are sorted by their numeric filenames in ascending order.
+    """
   checkpoints = []
   fs = infer_fs(save_dir)
   if fs.exists(save_dir):
@@ -232,6 +273,18 @@ def wait_for_evaluators(
   global_step: int,
   timeout: int,
 ) -> None:
+  """
+    Waits for all evaluators to finish and checks for their completion status.
+
+    Args:
+        save_dir (str): Directory where checkpoints are saved.
+        partition_names (List[str]): List of partition names to check for completion.
+        global_step (int): The global step for which to wait for evaluators.
+        timeout (int): Maximum time in seconds to wait for evaluators to finish.
+
+    Returns:
+        None: This function returns nothing but logs the progress and results.
+    """
   logging.info("Waiting for all evaluators to finish.")
   start_time = time.time()
 

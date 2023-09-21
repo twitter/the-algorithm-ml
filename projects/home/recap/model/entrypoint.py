@@ -26,7 +26,19 @@ def unsanitize(sanitized_task_name):
 
 
 def _build_single_task_model(task: model_config_mod.TaskModel, input_shape: int):
-  """ "Builds a model for a single task"""
+  """
+  Build a model for a single task based on the provided configuration.
+
+  Args:
+    task (model_config_mod.TaskModel): The task model configuration.
+    input_shape (int): The input shape for the model.
+
+  Returns:
+    torch.nn.Module: The constructed model for the single task.
+        
+  Raises:
+    ValueError: If the task configuration is not recognized.
+  """
   if task.mlp_config:
     return mlp.Mlp(in_features=input_shape, mlp_config=task.mlp_config)
   elif task.dcn_config:
@@ -38,7 +50,12 @@ def _build_single_task_model(task: model_config_mod.TaskModel, input_shape: int)
 
 
 class MultiTaskRankingModel(torch.nn.Module):
-  """Multi-task ranking model."""
+  """
+  Multi-task ranking model that handles multiple ranking tasks simultaneously.
+
+  This model takes various input features and predicts rankings for multiple 
+  tasks using shared or separate towers.
+  """
 
   def __init__(
     self,
@@ -47,12 +64,18 @@ class MultiTaskRankingModel(torch.nn.Module):
     data_config: RecapDataConfig,
     return_backbone: bool = False,
   ):
-    """Constructor for Multi task learning.
+    """
+    Constructor for Multi-task ranking model.
+
+    Args:
+      input_shapes (Mapping[str, torch.Size]): A mapping of input feature names to their shapes.
+      config (ModelConfig): The model configuration.
+      data_config (RecapDataConfig): The data configuration.
+      return_backbone (bool, optional): Whether to return the backbone network in the output. Defaults to False.
 
     Assumptions made:
-    1. Tasks specified in data config match model architecture.
-
-    These are all validated in config.
+      1. Tasks specified in data config match model architecture.
+      These are all validated in config.
     """
     super().__init__()
 
@@ -168,6 +191,23 @@ class MultiTaskRankingModel(torch.nn.Module):
     labels: Optional[torch.Tensor] = None,
     weights: Optional[torch.Tensor] = None,
   ):
+    """
+    Forward pass of the Multi-task ranking model.
+
+    Args:
+      continuous_features (torch.Tensor): Continuous input features.
+      binary_features (torch.Tensor): Binary input features.
+      discrete_features (Optional[torch.Tensor], optional): Discrete input features. Defaults to None.
+      sparse_features ([type], optional): Sparse input features. Defaults to None.
+      user_embedding (Optional[torch.Tensor], optional): User embeddings. Defaults to None.
+      user_eng_embedding (Optional[torch.Tensor], optional): User engagement embeddings. Defaults to None.
+      author_embedding (Optional[torch.Tensor], optional): Author embeddings. Defaults to None.
+      labels (Optional[torch.Tensor], optional): Target labels. Defaults to None.
+      weights (Optional[torch.Tensor], optional): Weights for the loss function. Defaults to None.
+
+    Returns:
+      Dict[str, torch.Tensor]: A dictionary containing the model's outputs.
+    """
     concat_dense_features = [
       self._preprocessor(continuous_features=continuous_features, binary_features=binary_features)
     ]
@@ -270,6 +310,20 @@ def create_ranking_model(
   data_config=None,
   return_backbone=False,
 ):
+  """
+  Creates a ranking model based on the provided specifications and configuration.
+
+  Args:
+    data_spec: The input data specifications.
+    config (config_mod.RecapConfig): The model configuration.
+    device (torch.device): The device where the model should be placed.
+    loss_fn (Optional[Callable], optional): A custom loss function. Defaults to None.
+    data_config: The data configuration. Defaults to None.
+    return_backbone (bool, optional): Whether to return the backbone network in the output. Defaults to False.
+
+  Returns:
+    torch.nn.Module: The created ranking model.
+  """
 
   if list(config.model.tasks.values())[0].dlrm_config:
     raise NotImplementedError()

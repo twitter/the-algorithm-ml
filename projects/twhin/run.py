@@ -37,6 +37,12 @@ def run(
   all_config: TwhinConfig,
   save_dir: Optional[str] = None,
 ):
+  """Run the training process for TwhinModel.
+
+  Args:
+    all_config (TwhinConfig): The configuration for the entire Twhin model.
+    save_dir (str, optional): The directory where model checkpoints will be saved. Defaults to None.
+  """
   train_dataset = create_dataset(all_config.train_data, all_config.model)
 
   if env.is_reader():
@@ -80,6 +86,11 @@ def run(
 
 
 def main(argv):
+  """Main entry point for the Twhin training script.
+
+  Args:
+    argv: Command-line arguments.
+  """
   logging.info("Starting")
 
   logging.info(f"parsing config from {FLAGS.config_yaml_path}...")

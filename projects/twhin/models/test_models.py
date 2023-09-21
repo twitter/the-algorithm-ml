@@ -18,6 +18,12 @@ EMB_DIM = 128
 
 
 def twhin_model_config() -> TwhinModelConfig:
+  """
+    Create a configuration for the Twhin model.
+
+    Returns:
+        TwhinModelConfig: The Twhin model configuration.
+    """
   sgd_config_0 = OptimizerConfig(sgd=SgdConfig(lr=0.01))
   sgd_config_1 = OptimizerConfig(sgd=SgdConfig(lr=0.02))
 
@@ -52,6 +58,12 @@ def twhin_model_config() -> TwhinModelConfig:
 
 
 def twhin_data_config() -> TwhinDataConfig:
+  """
+    Create a configuration for the Twhin data.
+
+    Returns:
+        TwhinDataConfig: The Twhin data configuration.
+    """
   data_config = TwhinDataConfig(
     data_root="/",
     per_replica_batch_size=10,
@@ -65,6 +77,15 @@ def twhin_data_config() -> TwhinDataConfig:
 
 
 def test_twhin_model():
+  """
+    Test the Twhin model creation and optimization.
+
+    This function creates a Twhin model using the specified configuration and tests its optimization. It also checks
+    the device placement of model parameters.
+
+    Returns:
+        None
+    """
   model_config = twhin_model_config()
   loss_fn = F.binary_cross_entropy_with_logits
 
@@ -84,6 +105,23 @@ def test_twhin_model():
 
 
 def test_unequal_dims():
+  """
+    Test function for validating unequal embedding dimensions in TwhinEmbeddingsConfig.
+
+    This function tests whether the validation logic correctly raises a `ValidationError` when
+    embedding dimensions in the `TwhinEmbeddingsConfig` are not equal for all tables.
+
+    The test includes the following steps:
+    1. Create two embedding configurations with different embedding dimensions.
+    2. Attempt to create a `TwhinEmbeddingsConfig` instance with the unequal embedding dimensions.
+    3. Assert that a `ValidationError` is raised, indicating that embedding dimensions must match.
+
+    This function serves as a test case to ensure that the validation logic enforces equal embedding dimensions
+    in the `TwhinEmbeddingsConfig` for all tables.
+
+    Raises:
+        AssertionError: If the expected `ValidationError` is not raised.
+    """
   sgd_config_1 = OptimizerConfig(sgd=SgdConfig(lr=0.02))
   sgd_config_2 = OptimizerConfig(sgd=SgdConfig(lr=0.05))
   table0 = EmbeddingBagConfig(

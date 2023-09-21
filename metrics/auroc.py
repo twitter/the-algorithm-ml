@@ -29,6 +29,9 @@ def _compute_helper(
     equal_predictions_as_incorrect: For positive & negative labels having identical scores,
      we assume that they are correct prediction (i.e weight = 1) when ths is False. Otherwise,
      we assume that they are correct prediction (i.e weight = 0).
+
+  Returns:
+    torch.Tensor: The computed AUROC
   """
   dim = 0
 
@@ -52,24 +55,34 @@ def _compute_helper(
 
 class AUROCWithMWU(torchmetrics.Metric):
   """
-  AUROC using Mann-Whitney U-test.
-  See https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve.
+    AUROC (Area Under the Receiver Operating Characteristic) using Mann-Whitney U-test.
 
-  This AUROC implementation is well suited to (non-zero) low-CTR. In particular it will return
-  the correct AUROC even if the predicted probabilities are all close to 0.
-  Currently only support binary classification.
-  """
+    This AUROC implementation is well suited for (non-zero) low-CTR (Click-Through Rate)
+    scenarios. It returns the correct AUROC even when predicted probabilities are close to 0.
+
+    See https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve.
+
+    Note: Currently, this implementation only supports binary classification.
+
+    Args:
+        label_threshold (float): Threshold for classifying labels as positive or negative.
+            Labels above this threshold are considered positive, and those below are considered negative.
+        raise_missing_class (bool): If True, an error is raised when the negative or positive class is missing.
+            Otherwise, a warning is logged, and AUROC is computed.
+        **kwargs: Additional parameters supported by all torchmetrics.Metric.
+    """
 
   def __init__(self, label_threshold: float = 0.5, raise_missing_class: bool = False, **kwargs):
     """
+        Initializes the AUROCWithMWU metric.
 
-    Args:
-      label_threshold: Labels strictly above this threshold are considered positive labels,
-                       otherwise, they are considered negative.
-      raise_missing_class: If True, an error will be raise if negative or positive class is missing.
-        Otherwise, we will simply log a warning.
-      **kwargs: Additional parameters supported by all torchmetrics.Metric.
-    """
+        Args:
+            label_threshold (float): Threshold for classifying labels as positive or negative.
+                Labels above this threshold are considered positive, and those below are considered negative.
+            raise_missing_class (bool): If True, an error is raised when the negative or positive class is missing.
+                Otherwise, a warning is logged, and AUROC is computed.
+            **kwargs: Additional parameters supported by all torchmetrics.Metric.
+        """
     super().__init__(**kwargs)
     self.add_state("predictions", default=[], dist_reduce_fx="cat")
     self.add_state("target", default=[], dist_reduce_fx="cat")

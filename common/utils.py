@@ -12,6 +12,15 @@ C = TypeVar("C", bound=base_config.BaseConfig)
 
 
 def _read_file(f):
+  """
+    Read the contents of a file using fsspec.
+
+    Args:
+        f: File path or URL.
+
+    Returns:
+        The contents of the file.
+    """
   with fsspec.open(f) as f:
     return f.read()
 
@@ -21,18 +30,24 @@ def setup_configuration(
   yaml_path: str,
   substitute_env_variable: bool = False,
 ) -> Tuple[C, str]:
-  """Resolves a config at a yaml path.
-
-  Args:
-    config_type: Pydantic config class to load.
-    yaml_path: yaml path of the config file.
-    substitute_env_variable: If True substitute string in the format $VAR or ${VAR} by their
-    environment variable value whenever possible. If an environment variable doesn't exist,
-    the string is left unchanged.
-
-  Returns:
-    The pydantic config object.
   """
+    Load a Pydantic config object from a YAML file and optionally substitute environment variables.
+
+    Args:
+        config_type: Pydantic config class to load.
+        yaml_path: YAML path of the config file.
+        substitute_env_variable: If True, substitute strings in the format $VAR or ${VAR}
+            with their environment variable values whenever possible.
+            If an environment variable doesn't exist, the string is left unchanged.
+
+    Returns:
+        A tuple containing the Pydantic config object and the resolved YAML content.
+
+    Example:
+        ```python
+        config, resolved_yaml = setup_configuration(MyConfig, "config.yaml", substitute_env_variable=True)
+        ```
+    """
 
   def _substitute(s):
     if substitute_env_variable:

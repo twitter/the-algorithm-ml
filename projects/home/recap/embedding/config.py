@@ -30,6 +30,7 @@ class EmbeddingBagConfig(base_config.BaseConfig):
 
 
 class EmbeddingOptimizerConfig(base_config.BaseConfig):
+  """Configuration for the optimizer used for embedding tables."""
   learning_rate: optimizer_config.LearningRate = pydantic.Field(
     None, description="learning rate scheduler for the EBC"
   )
@@ -52,6 +53,7 @@ class LargeEmbeddingsConfig(base_config.BaseConfig):
 
 
 class StratifierConfig(base_config.BaseConfig):
+  """Configuration for Stratifier."""
   name: str
   index: int
   value: int
@@ -87,7 +89,8 @@ class SmallEmbeddingsConfig(base_config.BaseConfig):
   the model, whereas LargeEmbedding usually is meant to be hydrated outside the model at
   serving time due to size (>>1 GB).
 
-  This small embeddings table uses the same optimizer as the rest of the model."""
+  This small embeddings table uses the same optimizer as the rest of the model.
+  """
 
   tables: List[SmallEmbeddingBagConfig] = pydantic.Field(
     ..., description="list of embedding tables"

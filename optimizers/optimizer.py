@@ -14,7 +14,35 @@ from tml.ml_logging.torch_logging import logging
 
 
 def compute_lr(lr_config, step):
-  """Compute a learning rate."""
+  """
+    Compute the learning rate based on the specified learning rate configuration.
+
+    This function calculates the learning rate according to the given configuration, which can include
+    constant learning rates, piecewise constant schedules, linear ramps, and cosine annealing.
+
+    Args:
+        lr_config (LearningRate): The learning rate configuration specifying the learning rate schedule.
+        step (int): The current training step or iteration.
+
+    Returns:
+        float: The computed learning rate for the current step.
+
+    Raises:
+        ValueError: If the `lr_config` is invalid or contains conflicting options.
+
+    Example:
+        ```python
+        lr_schedule = LearningRate(
+            constant=0.001,
+            piecewise_constant=PiecewiseConstant(
+                learning_rate_boundaries=[1000, 2000, 3000],
+                learning_rate_values=[0.1, 0.05, 0.01, 0.001]
+            )
+        )
+        current_step = 2500
+        learning_rate = compute_lr(lr_schedule, current_step)
+        ```
+  """
   if lr_config.constant is not None:
     return lr_config.constant
   elif lr_config.piecewise_constant is not None:
@@ -46,11 +74,54 @@ def compute_lr(lr_config, step):
 
 
 class LRShim(_LRScheduler):
-  """Shim to get learning rates into a LRScheduler.
-
-  This adheres to the torch.optim scheduler API and can be plugged anywhere that
-  e.g. exponential decay can be used.
   """
+    Learning Rate Scheduler Shim to adjust learning rates during training.
+
+    This class acts as a shim to apply different learning rates to individual parameter groups
+    within an optimizer. It adheres to the torch.optim scheduler API and can be used with various
+    optimizers, allowing fine-grained control over learning rates based on configuration.
+
+    Args:
+        optimizer (torch.optim.Optimizer): The optimizer for which learning rates will be adjusted.
+        lr_dict (Dict[str, LearningRate]): A dictionary mapping parameter group names to their
+            corresponding learning rate configurations.
+        last_epoch (int, optional): The index of the last epoch. Default is -1.
+        verbose (bool, optional): If True, prints a warning message when accessing learning rates
+            using the deprecated `get_lr()` method. Default is False.
+
+    Raises:
+        ValueError: If the number of parameter groups in the optimizer does not match the number
+            of learning rate configurations provided.
+
+    Note:
+        To obtain the last computed learning rates, please use `get_last_lr()`.
+
+    Example:
+        ```python
+        optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+        lr_schedule = {
+            'main': LearningRate(constant=0.01),
+            'auxiliary': LearningRate(piecewise_constant=PiecewiseConstant(
+                learning_rate_boundaries=[1000, 2000],
+                learning_rate_values=[0.01, 0.001]
+            ))
+        }
+        lr_shim = LRShim(optimizer, lr_schedule)
+
+        for epoch in range(num_epochs):
+            # Train the model
+            train(...)
+            # Update learning rates at the end of each epoch
+            lr_shim.step(epoch)
+
+        final_lr_main = lr_shim.get_last_lr()['main']
+        final_lr_auxiliary = lr_shim.get_last_lr()['auxiliary']
+        ```
+
+    See Also:
+        - `LearningRate`: Configuration for specifying learning rates.
+        - `PiecewiseConstant`: Configuration for piecewise constant learning rate schedules.
+    """
 
   def __init__(
     self,
@@ -95,9 +166,42 @@ def get_optimizer_class(optimizer_config: OptimizerConfig):
 def build_optimizer(
   model: torch.nn.Module, optimizer_config: OptimizerConfig
 ) -> Tuple[Optimizer, _LRScheduler]:
-  """Builds an optimizer and LR scheduler from an OptimizerConfig.
-  Note: use this when you want the same optimizer and learning rate schedule for all your parameters.
   """
+    Build an optimizer and learning rate scheduler based on the provided optimizer configuration.
+
+    Args:
+        model (torch.nn.Module): The PyTorch model for which the optimizer will be created.
+        optimizer_config (OptimizerConfig): The optimizer configuration specifying the optimizer
+            algorithm and learning rate settings.
+
+    Returns:
+        Tuple[Optimizer, _LRScheduler]: A tuple containing the optimizer and learning rate scheduler
+            objects.
+
+    Note:
+        This function is intended for cases where you want the same optimizer and learning rate
+        schedule for all model parameters.
+
+    Example:
+        ```python
+        model = MyModel()
+        optimizer_config = OptimizerConfig(
+            learning_rate=LearningRate(constant=0.01),
+            sgd=SgdConfig(lr=0.01, momentum=0.9)
+        )
+        optimizer, scheduler = build_optimizer(model, optimizer_config)
+
+        for epoch in range(num_epochs):
+            # Train the model with the optimizer
+            train(model, optimizer, ...)
+            # Update learning rates at the end of each epoch
+            scheduler.step(epoch)
+        ```
+
+    See Also:
+        - `OptimizerConfig`: Configuration for specifying optimizer settings.
+        - `LRShim`: Learning rate scheduler shim for fine-grained learning rate control.
+    """
   optimizer_class = get_optimizer_class(optimizer_config)
   optimizer = optimizer_class(model.parameters(), **optimizer_config.sgd.dict())
   # We're passing everything in as one group here

@@ -36,9 +36,24 @@ import torchmetrics
 class MetricMixin:
   @abstractmethod
   def transform(self, outputs: Dict[str, torch.Tensor]) -> Dict:
+    """
+        Abstract method to transform model outputs into a dictionary of metrics.
+
+        Args:
+            outputs (Dict[str, torch.Tensor]): Model outputs.
+
+        Returns:
+            Dict: A dictionary of computed metrics.
+        """
     ...
 
   def update(self, outputs: Dict[str, torch.Tensor]):
+    """
+        Update the metrics based on model outputs.
+
+        Args:
+            outputs (Dict[str, torch.Tensor]): Model outputs.
+        """
     results = self.transform(outputs)
     # Do not try to update if any tensor is empty as a result of stratification.
     for value in results.values():
@@ -49,6 +64,13 @@ class MetricMixin:
 
 class TaskMixin:
   def __init__(self, task_idx: int = -1, **kwargs):
+    """
+        Initialize a TaskMixin instance.
+
+        Args:
+            task_idx (int): Index of the task associated with this mixin (default: -1).
+            **kwargs: Additional keyword arguments.
+        """
     super().__init__(**kwargs)
     self._task_idx = task_idx
 
@@ -59,13 +81,31 @@ class StratifyMixin:
     stratifier=None,
     **kwargs,
   ):
+    """
+        Initialize a StratifyMixin instance.
+
+        Args:
+            stratifier: A stratifier for filtering outputs (default: None).
+            **kwargs: Additional keyword arguments.
+        """
     super().__init__(**kwargs)
     self._stratifier = stratifier
 
   def maybe_apply_stratification(
     self, outputs: Dict[str, torch.Tensor], value_names: List[str]
   ) -> Dict[str, torch.Tensor]:
-    """Pick out examples with values for which the stratifier feature is equal to a specific stratifier indicator value."""
+    """
+        Apply stratification to filter examples in the outputs.
+
+        Pick out examples with values for which the stratifier feature is equal to a specific stratifier indicator value.
+
+        Args:
+            outputs (Dict[str, torch.Tensor]): Model outputs.
+            value_names (List[str]): Names of values to filter.
+
+        Returns:
+            Dict[str, torch.Tensor]: Filtered outputs.
+        """
     outputs = outputs.copy()
     if not self._stratifier:
       return outputs
@@ -84,12 +124,20 @@ class StratifyMixin:
 
 
 def prepend_transform(base_metric: torchmetrics.Metric, transform: Callable):
-  """Returns new class using MetricMixin and given base_metric.
-
-  Functionally the same using inheritance, just saves some lines of code
-  if no need for class attributes.
-
   """
+    Returns a new class using MetricMixin and the given base_metric.
+
+    Functionally the same as using inheritance, but it saves some lines of code
+    if there's no need for class attributes.
+
+    Args:
+        base_metric (torchmetrics.Metric): The base metric class to prepend the transform to.
+        transform (Callable): The transformation function to prepend to the metric.
+
+    Returns:
+        Type: A new class that includes MetricMixin and the provided base_metric
+        with the specified transformation method.
+    """
 
   def transform_method(_self, *args, **kwargs):
     return transform(*args, **kwargs)

@@ -18,7 +18,35 @@ import torch.distributed as dist
 
 
 def rank_specific(logger):
-  """Ensures that we only override a given logger once."""
+  """
+    Customize logger behavior based on the distributed environment and rank.
+
+    This function allows for customizing the behavior of a logger based on the distributed environment and the rank
+    of the current process. It overrides standard logging methods (e.g., error, warning) to conditionally log messages
+    depending on the rank or limit the number of redundant logs.
+
+    Args:
+        logger: The logger object to customize.
+
+    Returns:
+        The customized logger.
+
+    Example:
+        To use this function with the `logging` module:
+        ```python
+        import logging
+        from rank_specific_logging import rank_specific
+
+        logger = logging.getLogger(__name__)
+        rank_specific(logger)
+        ```
+
+    Customization:
+        - Messages are only logged if the distributed environment is not initialized or if the rank matches.
+        - The 'warning' method is limited to logging a single redundant warning.
+        - Logging from rank -1 is redirected to include the rank information.
+
+    """
   if hasattr(logger, "_ALREADY_OVERWRITTEN_TO_BE_RANK_SPECIFIC"):
     return logger
 

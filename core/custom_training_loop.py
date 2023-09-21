@@ -46,7 +46,24 @@ def get_new_iterator(iterable: Iterable):
 
 
 def _get_step_fn(pipeline, data_iterator, training: bool):
+  """
+    Returns a function to perform a single evaluation step.
+
+    Args:
+        pipeline (Pipeline): The pipeline object containing the model.
+        data_iterator (Iterator): The data iterator for evaluation.
+        training (bool): Flag indicating if the model should be in training mode.
+
+    Returns:
+        function: A function that performs a single evaluation step.
+  """
   def step_fn():
+    """
+        Perform a single evaluation step.
+
+        Returns:
+            Any: The evaluation results after a single step.
+      """
     # It turns out that model.train() and model.eval() simply switch a single field inside the model
     # class,so it's somewhat safer to wrap in here.
     if training:
@@ -69,7 +86,21 @@ def _run_evaluation(
   eval_batch_size: int,
   logger=None,
 ):
-  """Runs the evaluation loop over all evaluation iterators."""
+  """
+    Run the evaluation loop over all evaluation iterators.
+
+    Args:
+        pipeline (Pipeline): The pipeline object containing the model.
+        dataset (Dataset): The dataset to evaluate.
+        eval_steps (int): The number of evaluation steps to perform.
+        metrics (tm.MetricCollection): A collection of evaluation metrics.
+        eval_batch_size (int): Batch size for evaluation.
+        logger (Optional[Logger]): A logger for recording evaluation progress (default: None).
+
+    Returns:
+        dict: A dictionary containing the computed evaluation metrics.
+    """
+
   dataset = get_new_iterator(dataset)
   step_fn = _get_step_fn(pipeline, dataset, training=False)
   last_time = datetime.datetime.now()
@@ -109,15 +140,29 @@ def train(
   parameters_to_log: Optional[Dict[str, Callable]] = None,
   tables_to_log: Optional[List[str]] = None,
 ) -> None:
-  """Runs training and eval on the given TrainPipeline
-
-  Args:
-    dataset: data iterator for the training set
-    evaluation_iterators: data iterators for the different evaluation sets
-    scheduler: optional learning rate scheduler
-    output_transform_for_metrics: optional transformation functions to transorm the model
-                                  output and labels into a format the metrics can understand
   """
+    Runs training and evaluation on the given TrainPipeline.
+
+    Args:
+        model (torch.nn.Module): The neural network model to train.
+        optimizer (torch.optim.Optimizer): The optimizer for model optimization.
+        device (str): The target device for model training (e.g., 'cuda' or 'cpu').
+        save_dir (str): The directory to save model checkpoints and logs.
+        logging_interval (int): Interval for logging training progress.
+        train_steps (int): The number of training steps to perform.
+        checkpoint_frequency (int): Frequency of saving model checkpoints.
+        dataset (Iterable): Data iterator for the training set.
+        worker_batch_size (int): Batch size for data loading workers.
+        num_workers (Optional[int]): Number of data loading workers (default: 0).
+        enable_amp (bool): Flag to enable Automatic Mixed Precision (AMP) training (default: False).
+        initial_checkpoint_dir (Optional[str]): Directory to initialize training from (default: None).
+        gradient_accumulation (Optional[int]): Number of gradient accumulation steps (default: None).
+        logger_initializer (Optional[Callable]): A logger initializer function (default: None).
+        scheduler (_LRScheduler): Optional learning rate scheduler (default: None).
+        metrics (Optional[tm.MetricCollection]): A collection of evaluation metrics (default: None).
+        parameters_to_log (Optional[Dict[str, Callable]]): Dictionary of parameters to log (default: None).
+        tables_to_log (Optional[List[str]]): List of tables to log (default: None).
+    """
 
   train_pipeline = TrainPipelineSparseDist(
     model=model,
@@ -262,6 +307,15 @@ def log_eval_results(
   partition_name: str,
   step: int,
 ):
+  """
+    Logs evaluation results and optionally records them using a provided logger.
+
+    Args:
+        results (Any): The evaluation results to log.
+        eval_logger (Callable): A logger for recording evaluation results.
+        partition_name (str): The name of the evaluation partition.
+        step (int): The current step in the evaluation.
+    """
   results = tree.map_structure(lambda elem: torch.as_tensor(elem).cpu(), results)
   logging.info(f"Step: {step}, evaluation ({partition_name}).")
   for metric_name, metric_value in results.items():
@@ -285,6 +339,23 @@ def only_evaluate(
   partition_name: str,
   metrics: Optional[tm.MetricCollection] = None,
 ):
+  """
+    Performs evaluation on a given dataset partition.
+
+    Args:
+        model (torch.nn.Module): The neural network model for evaluation.
+        optimizer (torch.optim.Optimizer): The optimizer used during evaluation.
+        device (str): The target device for evaluation (e.g., 'cuda' or 'cpu').
+        save_dir (str): The directory containing model checkpoints.
+        num_train_steps (int): The total number of training steps.
+        dataset (Iterable): Data iterator for evaluation.
+        eval_batch_size (int): Batch size for evaluation.
+        num_eval_steps (int): The number of evaluation steps to perform.
+        eval_timeout_in_s (int): Timeout for evaluating checkpoints in seconds.
+        eval_logger (Callable): A logger for recording evaluation results.
+        partition_name (str): The name of the evaluation partition.
+        metrics (Optional[tm.MetricCollection]): A collection of evaluation metrics (default: None).
+    """
   logging.info(f"Evaluating on partition {partition_name}.")
   logging.info("Computing metrics:")
   logging.info(metrics)

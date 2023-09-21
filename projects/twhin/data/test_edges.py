@@ -23,6 +23,25 @@ RELATIONS = [
 
 
 def test_gen():
+  """Test function for generating edge-based datasets and dataloaders.
+
+    This function generates a synthetic dataset and tests the creation of an `EdgesDataset`
+    instance and a dataloader for it.
+
+    The test includes the following steps:
+    1. Create synthetic data with left-hand-side (lhs), right-hand-side (rhs), and relation (rel) columns.
+    2. Write the synthetic data to a Parquet file.
+    3. Create an `EdgesDataset` instance with the Parquet file pattern, table sizes, relations, and batch size.
+    4. Initialize the local file system for the dataset.
+    5. Create a dataloader for the dataset and retrieve the first batch.
+    6. Assert that the labels in the batch are positive.
+    7. Verify that the positive examples in the batch match the expected values.
+
+    This function serves as a test case for the data generation and dataset creation process.
+
+    Raises:
+        AssertionError: If any of the test assertions fail.
+    """
   import os
   import tempfile
 
