@@ -54,13 +54,21 @@ def maybe_shard_model(
   model,
   device: torch.device,
 ):
-  """Set up and apply DistributedModelParallel to a model if running in a distributed environment.
+  """
+    Set up and apply DistributedModelParallel to a model if running in a distributed environment.
 
     If in a distributed environment, constructs Topology, sharders, and ShardingPlan, then applies
     DistributedModelParallel.
 
-  If not in a distributed environment, returns model directly.
-  """
+    If not in a distributed environment, returns the model directly.
+
+    Args:
+        model: The PyTorch model.
+        device: The target device (e.g., 'cuda').
+
+    Returns:
+        The model wrapped with DistributedModelParallel if in a distributed environment, else the original model.
+    """
   if dist.is_initialized():
     logging.info("***** Wrapping in DistributedModelParallel *****")
     logging.info(f"Model before wrapping: {model}")
@@ -74,14 +82,15 @@ def maybe_shard_model(
 
 
 def log_sharded_tensor_content(weight_name: str, table_name: str, weight_tensor) -> None:
-  """Handy function to log the content of EBC embedding layer.
-     Only works for single GPU machines.
-
-  Args:
-      weight_name: name of tensor, as defined in model
-      table_name: name of the EBC table the weight is taken from
-      weight_tensor: embedding weight tensor
   """
+    Handy function to log the content of an EBC (Embedding Bag Concatenation) embedding layer.
+    Only works for single GPU machines.
+
+    Args:
+        weight_name: Name of the tensor, as defined in the model.
+        table_name: Name of the EBC table the weight is taken from.
+        weight_tensor: Embedding weight tensor.
+    """
   logging.info(f"{weight_name}, {table_name}", rank=-1)
   logging.info(f"{weight_tensor.metadata()}", rank=-1)
   output_tensor = torch.zeros(*weight_tensor.size(), device=torch.device("cuda:0"))

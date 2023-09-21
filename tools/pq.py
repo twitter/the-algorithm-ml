@@ -38,6 +38,15 @@ import pyarrow.parquet as pq
 
 
 def _create_dataset(path: str):
+  """
+    Create a PyArrow dataset from Parquet files located at the specified path.
+
+    Args:
+        path (str): The path to the Parquet files.
+
+    Returns:
+        pyarrow.dataset.Dataset: The PyArrow dataset.
+    """
   fs = infer_fs(path)
   files = fs.glob(path)
   return pads.dataset(files, format="parquet", filesystem=fs)
@@ -47,12 +56,27 @@ class PqReader:
   def __init__(
     self, path: str, num: int = 10, batch_size: int = 1024, columns: Optional[List[str]] = None
   ):
+    """
+        Initialize a Parquet Reader.
+
+        Args:
+            path (str): The path to the Parquet files.
+            num (int): The maximum number of rows to read.
+            batch_size (int): The batch size for reading data.
+            columns (Optional[List[str]]): A list of column names to read (default is None, which reads all columns).
+        """
     self._ds = _create_dataset(path)
     self._batch_size = batch_size
     self._num = num
     self._columns = columns
 
   def __iter__(self):
+    """
+        Iterate through the Parquet data and yield batches of rows.
+
+        Yields:
+            pyarrow.RecordBatch: A batch of rows.
+        """
     batches = self._ds.to_batches(batch_size=self._batch_size, columns=self._columns)
     rows_seen = 0
     for count, record in enumerate(batches):
@@ -62,6 +86,12 @@ class PqReader:
       rows_seen += record.data.num_rows
 
   def _head(self):
+    """
+        Get the first `num` rows of the Parquet data.
+
+        Returns:
+            pyarrow.RecordBatch: A batch of rows.
+        """
     total_read = self._num * self.bytes_per_row
     if total_read >= int(500e6):
       raise Exception(
@@ -71,6 +101,12 @@ class PqReader:
 
   @property
   def bytes_per_row(self) -> int:
+    """
+        Calculate the estimated bytes per row in the dataset.
+
+        Returns:
+            int: The estimated bytes per row.
+        """
     nbits = 0
     for t in self._ds.schema.types:
       try:
@@ -81,18 +117,23 @@ class PqReader:
     return nbits // 8
 
   def schema(self):
+    """
+        Display the schema of the Parquet dataset.
+        """
     print(f"\n# Schema\n{self._ds.schema}")
 
   def head(self):
-    """Displays first --num rows."""
+    """
+        Display the first `num` rows of the Parquet data as a pandas DataFrame.
+        """
     print(self._head().to_pandas())
 
   def distinct(self):
-    """Displays unique values seen in specified columns in the first `--num` rows.
-
-    Useful for getting an approximate vocabulary for certain columns.
-
     """
+        Display unique values seen in specified columns in the first `num` rows.
+
+        Useful for getting an approximate vocabulary for certain columns.
+        """
     for col_name, column in zip(self._head().column_names, self._head().columns):
       print(col_name)
       print("unique:", column.unique().to_pylist())

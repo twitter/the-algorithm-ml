@@ -9,9 +9,20 @@ import numpy as np
 
 
 class TruncateAndSlice(tf.keras.Model):
-  """Class for truncating and slicing."""
+  """
+    A class for truncating and slicing input features based on the provided configuration.
+
+    Args:
+        truncate_and_slice_config: A configuration object specifying how to truncate and slice features.
+    """
 
   def __init__(self, truncate_and_slice_config):
+    """
+        Initializes the TruncateAndSlice model.
+
+        Args:
+            truncate_and_slice_config: A configuration object specifying how to truncate and slice features.
+        """
     super().__init__()
     self._truncate_and_slice_config = truncate_and_slice_config
 
@@ -32,6 +43,17 @@ class TruncateAndSlice(tf.keras.Model):
       self._binary_mask = None
 
   def call(self, inputs, training=None, mask=None):
+    """
+        Applies truncation and slicing to the input features based on the configuration.
+
+        Args:
+            inputs: A dictionary of input features.
+            training: A boolean indicating whether the model is in training mode.
+            mask: A mask tensor.
+
+        Returns:
+            A dictionary of truncated and sliced input features.
+        """
     outputs = tf.nest.pack_sequence_as(inputs, tf.nest.flatten(inputs))
     if self._truncate_and_slice_config.continuous_feature_truncation:
       logging.info("Truncating continuous")
@@ -51,12 +73,23 @@ class TruncateAndSlice(tf.keras.Model):
 
 
 class DownCast(tf.keras.Model):
-  """Class for Down casting dataset before serialization and transferring to training host.
-  Depends on the data type and the actual data range, the down casting can be lossless or not.
-  It is strongly recommended to compare the metrics before and after down casting.
   """
+    A class for downcasting dataset before serialization and transferring to the training host.
+    
+    Depending on the data type and the actual data range, the downcasting can be lossless or not.
+    It is strongly recommended to compare the metrics before and after downcasting.
+
+    Args:
+        downcast_config: A configuration object specifying the features and their target data types.
+    """
 
   def __init__(self, downcast_config):
+    """
+        Initializes the DownCast model.
+
+        Args:
+            downcast_config: A configuration object specifying the features and their target data types.
+        """
     super().__init__()
     self.config = downcast_config
     self._type_map = {
@@ -65,6 +98,17 @@ class DownCast(tf.keras.Model):
     }
 
   def call(self, inputs, training=None, mask=None):
+    """
+        Applies downcasting to the input features based on the configuration.
+
+        Args:
+            inputs: A dictionary of input features.
+            training: A boolean indicating whether the model is in training mode.
+            mask: A mask tensor.
+
+        Returns:
+            A dictionary of downcasted input features.
+        """
     outputs = tf.nest.pack_sequence_as(inputs, tf.nest.flatten(inputs))
     for feature, type_str in self.config.features.items():
       assert type_str in self._type_map
@@ -78,14 +122,39 @@ class DownCast(tf.keras.Model):
 
 
 class RectifyLabels(tf.keras.Model):
-  """Class for rectifying labels"""
+  """
+    A class for downcasting dataset before serialization and transferring to the training host.
+    
+    Depending on the data type and the actual data range, the downcasting can be lossless or not.
+    It is strongly recommended to compare the metrics before and after downcasting.
+
+    Args:
+        downcast_config: A configuration object specifying the features and their target data types.
+    """
 
   def __init__(self, rectify_label_config):
+    """
+        Initializes the DownCast model.
+
+        Args:
+            downcast_config: A configuration object specifying the features and their target data types.
+        """
     super().__init__()
     self._config = rectify_label_config
     self._window = int(self._config.label_rectification_window_in_hours * 60 * 60 * 1000)
 
   def call(self, inputs, training=None, mask=None):
+    """
+        Applies downcasting to the input features based on the configuration.
+
+        Args:
+            inputs: A dictionary of input features.
+            training: A boolean indicating whether the model is in training mode.
+            mask: A mask tensor.
+
+        Returns:
+            A dictionary of downcasted input features.
+        """
     served_ts_field = self._config.served_timestamp_field
     impressed_ts_field = self._config.impressed_timestamp_field
 
@@ -102,13 +171,37 @@ class RectifyLabels(tf.keras.Model):
 
 
 class ExtractFeatures(tf.keras.Model):
-  """Class for extracting individual features from dense tensors by their index."""
+  """
+    A class for rectifying labels based on specified conditions.
+
+    This class is used to adjust label values in a dataset based on configured conditions involving timestamps.
+
+    Args:
+        rectify_label_config: A configuration object specifying the timestamp fields and label-to-engaged timestamp field mappings.
+    """
 
   def __init__(self, extract_features_config):
+    """
+        Initializes the RectifyLabels model.
+
+        Args:
+            rectify_label_config: A configuration object specifying the timestamp fields and label-to-engaged timestamp field mappings.
+        """
     super().__init__()
     self._config = extract_features_config
 
   def call(self, inputs, training=None, mask=None):
+    """
+        Rectifies label values based on the specified conditions.
+
+        Args:
+            inputs: A dictionary of input features including timestamp fields and labels.
+            training: A boolean indicating whether the model is in training mode.
+            mask: A mask tensor.
+
+        Returns:
+            A dictionary of input features with rectified label values.
+        """
 
     for row in self._config.extract_feature_table:
       inputs[row.name] = inputs[row.source_tensor][:, row.index]
@@ -168,7 +261,16 @@ class DownsampleNegatives(tf.keras.Model):
 
 
 def build_preprocess(preprocess_config, mode=config_mod.JobMode.TRAIN):
-  """Builds a preprocess model to apply all preprocessing stages."""
+  """
+    Builds a preprocess model to apply all preprocessing stages.
+
+    Args:
+        preprocess_config: A configuration object specifying the preprocessing parameters.
+        mode: A mode indicating the current job mode (TRAIN or INFERENCE).
+
+    Returns:
+        A preprocess model that applies all specified preprocessing stages.
+    """
   if mode == config_mod.JobMode.INFERENCE:
     logging.info("Not building preprocessors for dataloading since we are in Inference mode.")
     return None
