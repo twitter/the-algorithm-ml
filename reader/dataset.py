@@ -75,7 +75,7 @@ class Dataset(torch.utils.data.IterableDataset):
 
   def _create_dataset(self):
     return pads.dataset(
-      source=random.sample(self._files, len(self._files))[0],
+      source=random.choice(self._files),
       format="parquet",
       filesystem=self._fs,
       exclude_invalid_files=False,
@@ -105,14 +105,21 @@ class Dataset(torch.utils.data.IterableDataset):
   def dataloader(self, remote: bool = False):
     if not remote:
       return map(self.pa_to_batch, self.to_batches())
-    readers = get_readers(2)
+    # Default number of readers per worker - could be made configurable
+    DEFAULT_READERS_PER_WORKER = 2
+    readers = get_readers(DEFAULT_READERS_PER_WORKER)
     return map(self.pa_to_batch, reader_utils.roundrobin(*readers))
 
 
+# GRPC configuration constants
+GRPC_KEEPALIVE_TIME_MS = 60000
+GRPC_MIN_RECONNECT_BACKOFF_MS = 2000  
+GRPC_MAX_METADATA_SIZE = 1024 * 1024 * 1024  # 1GB
+
 GRPC_OPTIONS = [
-  ("GRPC_ARG_KEEPALIVE_TIME_MS", 60000),
-  ("GRPC_ARG_MIN_RECONNECT_BACKOFF_MS", 2000),
-  ("GRPC_ARG_MAX_METADATA_SIZE", 1024 * 1024 * 1024),
+  ("GRPC_ARG_KEEPALIVE_TIME_MS", GRPC_KEEPALIVE_TIME_MS),
+  ("GRPC_ARG_MIN_RECONNECT_BACKOFF_MS", GRPC_MIN_RECONNECT_BACKOFF_MS),
+  ("GRPC_ARG_MAX_METADATA_SIZE", GRPC_MAX_METADATA_SIZE),
 ]
 
 

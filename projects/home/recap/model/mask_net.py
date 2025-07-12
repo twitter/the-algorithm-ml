@@ -94,5 +94,5 @@ class MaskNet(torch.nn.Module):
       for mask_layer in self._mask_blocks:
         net = mask_layer(net=net, mask_input=inputs)
       # Share the output of the stacked MaskBlocks.
-      output = net if self.mask_net_config.mlp is None else self._dense_layers[net]["output"]
+      output = net if self.mask_net_config.mlp is None else self._dense_layers(net)["output"]
       return {"output": output, "shared_layer": net}

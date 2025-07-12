@@ -17,7 +17,9 @@ import torch
 from torchrec.optim import keyed
 
 
-_DEFAULT_LR = 24601.0  # NaN the model if we're not using the learning rate.
+# Default learning rate that will cause training failure if accidentally used
+# This forces explicit configuration of learning rates
+_DEFAULT_LR = float('nan')  # NaN the model if we're not using the learning rate.
 _BACKBONE = "backbone"
 _DENSE_EMBEDDINGS = "dense_ebc"
 

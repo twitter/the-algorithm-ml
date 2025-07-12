@@ -9,7 +9,16 @@ from tml.projects.home.recap.model import mlp
 from tml.projects.home.recap.model import mask_net
 from tml.projects.home.recap.model import numeric_calibration
 from tml.projects.home.recap.model.model_and_loss import ModelAndLoss
-import tml.projects.home.recap.model.config as model_config_mod
+
+# Remove duplicate import
+# import tml.projects.home.recap.model.config as model_config_mod
+
+# DCN module may not be available - import conditionally
+try:
+  from tml.projects.home.recap.model import dcn
+  _DCN_AVAILABLE = True
+except ImportError:
+  _DCN_AVAILABLE = False
 
 if TYPE_CHECKING:
   from tml.projects.home.recap import config as config_mod
@@ -30,6 +39,8 @@ def _build_single_task_model(task: model_config_mod.TaskModel, input_shape: int)
   if task.mlp_config:
     return mlp.Mlp(in_features=input_shape, mlp_config=task.mlp_config)
   elif task.dcn_config:
+    if not _DCN_AVAILABLE:
+      raise ImportError("DCN module not available. Please ensure DCN dependencies are installed.")
     return dcn.Dcn(dcn_config=task.dcn_config, in_features=input_shape)
   elif task.mask_net_config:
     return mask_net.MaskNet(mask_net_config=task.mask_net_config, in_features=input_shape)
