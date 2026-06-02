@@ -46,7 +46,7 @@ class BatchBase(Pipelineable, abc.ABC):
       if not isinstance(tensor, torch.Tensor):
         continue
       return tensor.shape[0]
-    raise Exception("Could not determine batch size from tensors.")
+    raise RuntimeError("Could not determine batch size from tensors.")
 
 
 @dataclass

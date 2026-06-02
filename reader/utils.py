@@ -71,7 +71,7 @@ def create_default_pa_to_batch(schema) -> DataclassBatch:
       pa.string(): pa.scalar("", type=pa.string()),
     }
     if pa_type not in type_map:
-      raise Exception(f"Imputation for type {pa_type} not supported.")
+      raise RuntimeError(f"Imputation for type {pa_type} not supported.")
     return type_map[pa_type]
 
   def _impute(array: pa.array) -> pa.array:

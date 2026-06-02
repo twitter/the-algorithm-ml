@@ -25,7 +25,7 @@ def maybe_start_dataset_service():
     return
 
   if packaging.version.parse(tf.__version__) < packaging.version.parse("2.5"):
-    raise Exception(f"maybe_distribute_dataset requires TF >= 2.5; got {tf.__version__}")
+    raise RuntimeError(f"maybe_distribute_dataset requires TF >= 2.5; got {tf.__version__}")
 
   if env.is_dispatcher():
     logging.info(f"env.get_reader_port() = {env.get_reader_port()}")

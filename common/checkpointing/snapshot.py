@@ -189,7 +189,7 @@ def get_checkpoint(
   checkpoints = get_checkpoints(save_dir)
   if not checkpoints:
     if not missing_ok:
-      raise Exception(f"No checkpoints found at {save_dir}")
+      raise RuntimeError(f"No checkpoints found at {save_dir}")
     else:
       logging.info(f"No checkpoints found for restoration at {save_dir}.")
       return ""
@@ -204,7 +204,7 @@ def get_checkpoint(
       chosen_checkpoint = checkpoint
       break
   else:
-    raise Exception(f"Desired checkpoint at {global_step} not found in {save_dir}")
+    raise RuntimeError(f"Desired checkpoint at {global_step} not found in {save_dir}")
   return chosen_checkpoint
 
 
