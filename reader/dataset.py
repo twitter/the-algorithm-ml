@@ -67,7 +67,7 @@ class Dataset(torch.utils.data.IterableDataset):
     columns = set(self._dataset_kwargs.get("columns", []))
     wrong_columns = set(columns) - set(self._schema.names)
     if wrong_columns:
-      raise Exception(f"Specified columns {list(wrong_columns)} not in schema.")
+      raise RuntimeError(f"Specified columns {list(wrong_columns)} not in schema.")
 
   def serve(self):
     self.reader = _Reader(location=self.LOCATION, ds=self)

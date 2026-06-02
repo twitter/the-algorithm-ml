@@ -64,7 +64,7 @@ class PqReader:
   def _head(self):
     total_read = self._num * self.bytes_per_row
     if total_read >= int(500e6):
-      raise Exception(
+      raise RuntimeError(
         "Sorry you're trying to read more than 500 MB " f"into memory ({total_read} bytes)."
       )
     return self._ds.head(self._num, columns=self._columns)
@@ -75,7 +75,7 @@ class PqReader:
     for t in self._ds.schema.types:
       try:
         nbits += t.bit_width
-      except:
+      except Exception:
         # Just estimate size if it is variable
         nbits += 8
     return nbits // 8
