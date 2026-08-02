@@ -47,7 +47,7 @@ def to_batch(x, sparse_feature_names: Optional[List[str]] = None) -> RecapBatch:
   try:
     features_in, labels = x
   except ValueError:
-    # For Mode.INFERENCE, we do not expect to recieve labels as part of the input tuple
+    # For Mode.INFERENCE, we do not expect to receive labels as part of the input tuple
     features_in, labels = x, None
 
   sparse_features = keyed_jagged_tensor_from_tensors_dict({})
